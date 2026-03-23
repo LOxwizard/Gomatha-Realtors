@@ -33,12 +33,12 @@ const VENTURES: Venture[] = [
     name: "Bitra Colony",
     location: "Venkannapalem, Chodavaram, Visakhapatnam",
     description: "An elite gated community offering a 360° hill view and premium infrastructure for a peaceful lifestyle.",
-    price: "Contact",
-    sqyds: "for Price",
+    price: "8,500",
+    sqyds: "per Sq. Yd",
     status: VentureStatus.RUNNING,
     imageUrl: "/Bitra-Colony/Bitra-Colony.jpg",
     brochureUrl: "/brochures/bitra_colony.pdf", 
-    layoutUrl: "/layouts/bitra_layout.pdf",
+    layoutUrl: "/Bitra-Colony/Bitra_Colony_Layout-copy.pdf",
     gallery: ["/Bitra-Colony/1.jpg", "/Bitra-Colony/2.jpg", "/Bitra-Colony/3.jpg", "/Bitra-Colony/4.jpg", "/Bitra-Colony/5.jpg", "/Bitra-Colony/6.jpg", "/Bitra-Colony/7.jpg", "/Bitra-Colony/8.jpg", "/Bitra-Colony/9.jpg", "/Bitra-Colony/10.jpg", "/Bitra-Colony/11.jpg"],
     features: ["40 & 33 Feet BT Roads", "Gated Community", "360° Hill View", "Drainage System", "Electricity"]
   },
@@ -52,7 +52,7 @@ const VENTURES: Venture[] = [
     status: VentureStatus.RUNNING,
     imageUrl: "/Siri-Chandana-Gardens/Siri-Chandana-Gardens.jpg",
     brochureUrl: "/brochures/Siri_Chandana_Gardens Brochure.pdf",
-    layoutUrl: "/layouts/siri_chandana_layout.pdf",
+    layoutUrl: "/Siri-Chandana-Gardens/Siri_Chandana_Gardens_Layout-copy.pdf",
     gallery: ["/Siri-Chandana-Gardens/1.jpg", "/Siri-Chandana-Gardens/2.jpg", "/Siri-Chandana-Gardens/3.jpg", "/Siri-Chandana-Gardens/4.jpg", "/Siri-Chandana-Gardens/5.jpg", "/Siri-Chandana-Gardens/6.jpg", "/Siri-Chandana-Gardens/7.jpg", "/Siri-Chandana-Gardens/8.jpg", "/Siri-Chandana-Gardens/9.jpg", "/Siri-Chandana-Gardens/10.jpg"],
     features: ["White Sandal Plantation", "Mahogany Plantation", "100% Vasthu", "24/7 Security"]
   },
@@ -61,7 +61,7 @@ const VENTURES: Venture[] = [
     name: "Kubera Phase-1",
     location: "Chintalapalem, Pendurthi, Visakhapatnam",
     description: "Strategically located near Pendurthi Junction, offering excellent connectivity and growth potential.",
-    price: "11,500",
+    price: "11,999",
     sqyds: "per Sq. Yd",
     status: VentureStatus.RUNNING,
     imageUrl: "/Kubera Phase-1/Kubera_phase_1.jpg",
@@ -75,12 +75,12 @@ const VENTURES: Venture[] = [
     name: "Siri Lake View Gardens",
     location: "K.Kotapadu, Visakhapatnam",
     description: "A serene residential project offering a peaceful lake view and modern amenities.",
-    price: "Contact for Price",
-    sqyds: "Out",
+    price: "5,999",
+    sqyds: "per Sq. Yd",
     status: VentureStatus.RUNNING,
     imageUrl: "/Siri-Lake-View-Gardens/siri-lake-view.jpg",
     brochureUrl: "/brochures/Siri_Lake_View_Gardens Brochure.pdf",
-    layoutUrl: "/layouts/lakeview_layout.pdf",
+    layoutUrl: "/Siri-Lake-View-Gardens/Siri_Lake_View_Gardens_Layout-copy.pdf",
     gallery: ["/Siri-Lake-View-Gardens/1.jpg", "/Siri-Lake-View-Gardens/2.jpg", "/Siri-Lake-View-Gardens/3.jpg", "/Siri-Lake-View-Gardens/4.jpg", "/Siri-Lake-View-Gardens/5.jpg", "/Siri-Lake-View-Gardens/6.jpg", "/Siri-Lake-View-Gardens/7.jpg", "/Siri-Lake-View-Gardens/8.jpg", "/Siri-Lake-View-Gardens/9.jpg", "/Siri-Lake-View-Gardens/10.jpg"],
     features: ["25 Feet Wide Roads", "Clear Title", "Ready for Construction"]
   }
@@ -125,7 +125,7 @@ const EnquiryModal = ({ projectName, onClose }: { projectName: string, onClose: 
     const data = { projectName, name: formData.get('name'), phone: formData.get('phone'), message: formData.get('message') };
 
     try {
-      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxE1OzO9XbH2Qrf6PKmHRFDI7woJVH_7M2OohSuL654WpBrNVV5HnRD_xnj19T_7hJV/exec'; 
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz1olB1rND76QSDFaGdW7f3nLXS6GAfXQRN7aCyQ_M/dev'; 
       await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
       setSubmitted(true);
       setTimeout(() => onClose(), 3000);
