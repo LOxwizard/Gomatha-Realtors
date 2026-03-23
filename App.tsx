@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Building2, 
@@ -21,11 +20,12 @@ import {
 import { VENTURES, COMPANY_DETAILS } from './constants';
 import { VentureStatus, Venture } from './types';
 
+/* --- SHARED COMPONENTS --- */
+
 const Logo = ({ className = "w-10 h-10", textColor = "text-navy" }: { className?: string, textColor?: string }) => (
   <div className={`flex items-center gap-2 ${className}`}>
     <div className="relative group">
       <svg viewBox="0 0 100 100" className="w-10 h-10 drop-shadow-lg">
-        {/* Stylized roof lines from the logo image */}
         <path d="M20 70 L50 30 L80 70" fill="none" stroke="#d4af37" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
         <path d="M35 70 L50 50 L65 70" fill="none" stroke="#d4af37" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
         <path d="M10 80 L90 80" fill="none" stroke="#d4af37" strokeWidth="2" strokeLinecap="round" />
@@ -38,23 +38,81 @@ const Logo = ({ className = "w-10 h-10", textColor = "text-navy" }: { className?
   </div>
 );
 
+/**
+ * NEW: Floating Enquiry Modal Component
+ */
+const EnquiryModal = ({ projectName, onClose }: { projectName: string, onClose: () => void }) => {
+  return (
+    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+      {/* Semi-transparent Backdrop */}
+      <div 
+        className="fixed inset-0 bg-navy/90 backdrop-blur-md transition-opacity"
+        onClick={onClose}
+      />
+
+      {/* Modal Card */}
+      <div className="relative w-full max-w-xl bg-white rounded-[40px] shadow-2xl overflow-hidden animate-fade-in-up">
+        <div className="p-8 md:p-14">
+          <div className="flex justify-between items-start mb-10">
+            <div>
+              <span className="text-gold font-black text-[10px] uppercase tracking-[0.3em] block mb-2">Private Inquiry</span>
+              <h3 className="text-3xl font-display text-navy leading-tight">{projectName}</h3>
+            </div>
+            <button 
+              onClick={onClose}
+              className="p-3 bg-gray-50 hover:bg-red-50 hover:text-red-500 rounded-2xl transition-all duration-300 text-navy"
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Your Name</label>
+                <input type="text" className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-xl text-navy focus:outline-none focus:ring-2 focus:ring-gold transition" placeholder="Enter your name" />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Phone Number</label>
+                <input type="tel" className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-xl text-navy focus:outline-none focus:ring-2 focus:ring-gold transition" placeholder="+91" />
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Investment Requirements</label>
+              <textarea 
+                className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-xl text-navy focus:outline-none focus:ring-2 focus:ring-gold transition" 
+                rows={4} 
+                placeholder="Share your specific needs or questions..."
+              ></textarea>
+            </div>
+
+            <button className="w-full py-6 bg-navy text-gold rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-navy-light transition shadow-2xl shadow-gold/10 border border-gold/30 flex items-center justify-center gap-3">
+              Request Callback <ArrowRight size={18} />
+            </button>
+            
+            <p className="text-[10px] text-center text-gray-400 uppercase font-bold tracking-widest opacity-60">
+              Personal data is encrypted and secure.
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () => void }) => {
+  const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
     <div className="fixed inset-0 z-[100] bg-navy overflow-y-auto">
-      {/* Background Video */}
       <div className="absolute inset-0 z-0">
         {venture.videoUrl ? (
-          <video 
-            autoPlay 
-            muted 
-            loop 
-            playsInline
-            className="w-full h-full object-cover opacity-40 scale-105"
-          >
+          <video autoPlay muted loop playsInline className="w-full h-full object-cover opacity-40 scale-105">
             <source src={venture.videoUrl} type="video/mp4" />
           </video>
         ) : (
@@ -63,9 +121,7 @@ const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () =
         <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-navy/80"></div>
       </div>
 
-      {/* Content Overlay */}
       <div className="relative z-10 min-h-screen flex flex-col">
-        {/* Project Nav */}
         <div className="p-6 md:p-10 flex justify-between items-center">
           <button 
             onClick={onBack}
@@ -120,7 +176,10 @@ const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () =
                 </div>
                 
                 <div className="mt-12 pt-10 border-t border-white/10">
-                  <button className="w-full py-5 gold-gradient text-navy font-black uppercase tracking-widest rounded-2xl hover:brightness-110 transition shadow-2xl shadow-gold/20 flex items-center justify-center gap-3">
+                  <button 
+                    onClick={() => setIsEnquiryOpen(true)}
+                    className="w-full py-5 gold-gradient text-navy font-black uppercase tracking-widest rounded-2xl hover:brightness-110 transition shadow-2xl shadow-gold/20 flex items-center justify-center gap-3"
+                  >
                     Enquire Now <Phone size={18} />
                   </button>
                   <p className="text-center text-xs text-gray-500 mt-6 font-medium tracking-wide">
@@ -132,9 +191,19 @@ const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () =
           </div>
         </div>
       </div>
+
+      {/* RENDER MODAL HERE */}
+      {isEnquiryOpen && (
+        <EnquiryModal 
+          projectName={venture.name} 
+          onClose={() => setIsEnquiryOpen(false)} 
+        />
+      )}
     </div>
   );
 };
+
+/* --- MAIN LANDING SECTIONS --- */
 
 const Navbar = ({ onLogoClick }: { onLogoClick: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -178,33 +247,19 @@ const Navbar = ({ onLogoClick }: { onLogoClick: () => void }) => {
 const Hero = ({ onExplore }: { onExplore: () => void }) => (
   <section id="home" className="relative h-[90vh] flex items-center overflow-hidden">
     <div className="absolute inset-0">
-      <img 
-        src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2000" 
-        className="w-full h-full object-cover"
-        alt="Real Estate Banner"
-      />
+      <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover" alt="Real Estate Banner" />
       <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/60 to-transparent"></div>
     </div>
-    
     <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white w-full">
       <div className="max-w-2xl animate-fade-in-up">
-        <span className="inline-block px-4 py-1.5 gold-gradient text-navy text-[10px] font-black uppercase tracking-widest rounded-full mb-6 shadow-xl">
-          Established 2017
-        </span>
-        <h1 className="text-5xl md:text-7xl font-display leading-[1.1] mb-6">
-          Hill View Living <br />
-          <span className="text-gold">With Nature</span>
-        </h1>
-        <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-lg font-light leading-relaxed">
-          Premium open plots and independent houses in Visakhapatnam. Your investment for today, security for tomorrow.
-        </p>
+        <span className="inline-block px-4 py-1.5 gold-gradient text-navy text-[10px] font-black uppercase tracking-widest rounded-full mb-6 shadow-xl">Established 2017</span>
+        <h1 className="text-5xl md:text-7xl font-display leading-[1.1] mb-6">Hill View Living <br /><span className="text-gold">With Nature</span></h1>
+        <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-lg font-light leading-relaxed">Premium open plots and independent houses in Visakhapatnam. Your investment for today, security for tomorrow.</p>
         <div className="flex flex-col sm:flex-row gap-4">
           <button onClick={onExplore} className="bg-gold text-navy px-8 py-4 rounded-full font-bold hover:bg-gold-light transition flex items-center justify-center gap-2 group shadow-xl">
             Explore Ventures <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
-          <a href="#contact" className="bg-white/10 backdrop-blur-md text-white border border-white/30 px-8 py-4 rounded-full font-bold hover:bg-white hover:text-navy transition flex items-center justify-center gap-2">
-            Contact Sales
-          </a>
+          <a href="#contact" className="bg-white/10 backdrop-blur-md text-white border border-white/30 px-8 py-4 rounded-full font-bold hover:bg-white hover:text-navy transition flex items-center justify-center gap-2">Contact Sales</a>
         </div>
       </div>
     </div>
@@ -212,42 +267,19 @@ const Hero = ({ onExplore }: { onExplore: () => void }) => (
 );
 
 const VentureCard = ({ venture, onClick }: { venture: Venture, onClick: () => void }) => (
-  <div 
-    onClick={onClick}
-    className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 group cursor-pointer"
-  >
+  <div onClick={onClick} className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 group cursor-pointer">
     <div className="relative h-72 overflow-hidden">
-      <img 
-        src={venture.imageUrl} 
-        alt={venture.name} 
-        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-      />
-      <div className="absolute inset-0 bg-navy/20 group-hover:bg-navy/0 transition-colors"></div>
+      <img src={venture.imageUrl} alt={venture.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
       <div className="absolute top-6 right-6">
-        <span className={`px-4 py-1.5 text-[10px] font-black uppercase rounded-full shadow-lg backdrop-blur-md border ${
-          venture.status === VentureStatus.RUNNING 
-          ? 'bg-green-500/90 text-white border-green-400' 
-          : 'bg-navy/80 text-gold border-gold/30'
-        }`}>
+        <span className={`px-4 py-1.5 text-[10px] font-black uppercase rounded-full shadow-lg backdrop-blur-md border ${venture.status === VentureStatus.RUNNING ? 'bg-green-500/90 text-white border-green-400' : 'bg-navy/80 text-gold border-gold/30'}`}>
           {venture.status}
         </span>
       </div>
-      {venture.videoUrl && (
-        <div className="absolute bottom-6 left-6">
-          <div className="flex items-center gap-2 px-3 py-1 bg-navy/80 backdrop-blur-md rounded-full text-[10px] font-bold text-gold uppercase tracking-widest border border-gold/20">
-            <Zap size={12} className="fill-gold" /> Video Available
-          </div>
-        </div>
-      )}
     </div>
     <div className="p-8">
-      <div className="flex items-center gap-2 text-gold text-xs font-black uppercase tracking-widest mb-3">
-        <MapPin className="w-4 h-4" />
-        {venture.location.split(',')[0]}
-      </div>
+      <div className="flex items-center gap-2 text-gold text-xs font-black uppercase tracking-widest mb-3"><MapPin className="w-4 h-4" />{venture.location.split(',')[0]}</div>
       <h3 className="text-2xl font-bold text-navy mb-3 group-hover:text-gold transition-colors">{venture.name}</h3>
       <p className="text-gray-500 text-sm mb-8 line-clamp-2 leading-relaxed">{venture.description}</p>
-      
       <div className="flex items-center justify-between pt-6 border-t border-gray-50">
         <div className="flex flex-col">
           <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Price starting</span>
@@ -276,38 +308,22 @@ const About = () => (
             <div className="text-xs text-gray-300 font-black uppercase tracking-[0.2em]">Ventures <br />Delivered</div>
           </div>
         </div>
-        
-        <div className="animate-fade-in-right">
+        <div>
           <span className="text-gold font-black uppercase tracking-widest text-xs">Trusted Excellence Since 2017</span>
-          <h2 className="text-4xl md:text-5xl font-display text-navy mt-4 mb-8 leading-tight">
-            Building Your Legacy with <span className="text-gold">Integrity & Honor</span>
-          </h2>
-          <p className="text-gray-600 leading-relaxed mb-8 text-lg">
-            At Gomatha Realtors, we believe land is the most secure investment for your family's future. Our mission is to provide high-growth potential layouts with modern amenities while preserving the natural beauty of the landscape.
-          </p>
-          
+          <h2 className="text-4xl md:text-5xl font-display text-navy mt-4 mb-8 leading-tight">Building Your Legacy with <span className="text-gold">Integrity & Honor</span></h2>
+          <p className="text-gray-600 leading-relaxed mb-8 text-lg">At Gomatha Realtors, we believe land is the most secure investment for your family's future.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-12">
             {[
               { icon: ShieldCheck, title: 'Legal Guarantee', desc: '100% Clear Titles & Docs.' },
-              { icon: Trees, title: 'Eco-Friendly', desc: 'Lush greenery & plantations.' },
-              { icon: Zap, title: 'Smart Invest', desc: 'High appreciation locations.' },
-              { icon: Building2, title: 'Vaasthu Plus', desc: 'Scientifically designed plots.' }
+              { icon: Trees, title: 'Eco-Friendly', desc: 'Lush greenery & plantations.' }
             ].map((item, i) => (
               <div key={i} className="flex gap-4 p-2">
-                <div className="flex-shrink-0 w-14 h-14 bg-navy rounded-2xl flex items-center justify-center text-gold shadow-lg">
-                  <item.icon className="w-7 h-7" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-navy text-sm uppercase tracking-wider">{item.title}</h4>
-                  <p className="text-xs text-gray-500 mt-1 leading-relaxed">{item.desc}</p>
-                </div>
+                <div className="flex-shrink-0 w-14 h-14 bg-navy rounded-2xl flex items-center justify-center text-gold shadow-lg"><item.icon className="w-7 h-7" /></div>
+                <div><h4 className="font-bold text-navy text-sm uppercase tracking-wider">{item.title}</h4><p className="text-xs text-gray-500 mt-1 leading-relaxed">{item.desc}</p></div>
               </div>
             ))}
           </div>
-          
-          <button className="gold-gradient text-navy px-12 py-5 rounded-2xl font-black uppercase tracking-widest hover:brightness-110 transition shadow-2xl shadow-gold/10 border border-gold/30">
-            Download Profile
-          </button>
+          <button className="gold-gradient text-navy px-12 py-5 rounded-2xl font-black uppercase tracking-widest hover:brightness-110 transition shadow-2xl shadow-gold/10 border border-gold/30">Download Profile</button>
         </div>
       </div>
     </div>
@@ -316,10 +332,7 @@ const About = () => (
 
 const VenturesSection = ({ onProjectSelect }: { onProjectSelect: (v: Venture) => void }) => {
   const [filter, setFilter] = useState<VentureStatus | 'all'>('all');
-  
-  const filteredVentures = filter === 'all' 
-    ? VENTURES 
-    : VENTURES.filter(v => v.status === filter);
+  const filteredVentures = filter === 'all' ? VENTURES : VENTURES.filter(v => v.status === filter);
 
   return (
     <section id="ventures" className="py-24 bg-gray-50">
@@ -327,21 +340,12 @@ const VenturesSection = ({ onProjectSelect }: { onProjectSelect: (v: Venture) =>
         <div className="text-center max-w-2xl mx-auto mb-20">
           <span className="text-gold font-black text-xs uppercase tracking-[0.3em]">Our Portfolio</span>
           <h2 className="text-4xl md:text-5xl font-display text-navy mt-4 mb-6">Signature Masterpieces</h2>
-          <p className="text-gray-500 text-lg">Meticulously planned layouts across the rising city of Visakhapatnam.</p>
-          
           <div className="flex flex-wrap items-center justify-center gap-4 mt-12">
             {['all', VentureStatus.RUNNING, VentureStatus.COMPLETED].map((f) => (
-              <button 
-                key={f}
-                onClick={() => setFilter(f as any)}
-                className={`px-10 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all duration-500 ${filter === f ? 'bg-navy text-gold shadow-2xl ring-2 ring-gold/20' : 'bg-white text-navy border border-gray-200 hover:border-gold hover:text-gold'}`}
-              >
-                {f === 'all' ? 'All Projects' : f}
-              </button>
+              <button key={f} onClick={() => setFilter(f as any)} className={`px-10 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all duration-500 ${filter === f ? 'bg-navy text-gold shadow-2xl ring-2 ring-gold/20' : 'bg-white text-navy border border-gray-200 hover:border-gold hover:text-gold'}`}>{f === 'all' ? 'All Projects' : f}</button>
             ))}
           </div>
         </div>
-        
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
           {filteredVentures.map((venture) => (
             <VentureCard key={venture.id} venture={venture} onClick={() => onProjectSelect(venture)} />
@@ -354,77 +358,28 @@ const VenturesSection = ({ onProjectSelect }: { onProjectSelect: (v: Venture) =>
 
 const Contact = () => (
   <section id="contact" className="py-24 bg-navy text-white relative overflow-hidden">
-    <div className="absolute top-0 right-0 w-1/3 h-full bg-gold/5 skew-x-12 transform translate-x-1/2"></div>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid lg:grid-cols-2 gap-20">
         <div>
           <h2 className="text-5xl font-display mb-10 text-white">Let's Secure Your <span className="text-gold italic">Legacy</span></h2>
-          <p className="text-gray-400 mb-16 max-w-md text-lg leading-relaxed font-light">
-            Our specialized advisory team is ready to guide you through your next premium real estate acquisition.
-          </p>
-          
           <div className="space-y-10">
             <div className="flex gap-8 group">
-              <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-[20px] flex items-center justify-center flex-shrink-0 group-hover:border-gold group-hover:bg-gold/5 transition-all duration-500">
-                <Mail className="text-gold" />
-              </div>
-              <div>
-                <h4 className="text-xs font-black uppercase tracking-widest text-gold mb-2 opacity-60">General Enquiries</h4>
-                <p className="text-white text-lg font-bold group-hover:text-gold transition-colors">{COMPANY_DETAILS.email}</p>
-                <p className="text-gray-400 text-sm font-medium">{COMPANY_DETAILS.altEmail}</p>
-              </div>
+              <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-[20px] flex items-center justify-center flex-shrink-0 group-hover:border-gold transition-all duration-500"><Mail className="text-gold" /></div>
+              <div><h4 className="text-xs font-black uppercase tracking-widest text-gold mb-2 opacity-60">General Enquiries</h4><p className="text-white text-lg font-bold">{COMPANY_DETAILS.email}</p></div>
             </div>
-            
             <div className="flex gap-8 group">
-              <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-[20px] flex items-center justify-center flex-shrink-0 group-hover:border-gold group-hover:bg-gold/5 transition-all duration-500">
-                <MapPin className="text-gold" />
-              </div>
-              <div>
-                <h4 className="text-xs font-black uppercase tracking-widest text-gold mb-2 opacity-60">Corporate Headquarters</h4>
-                {COMPANY_DETAILS.addresses.map((addr, i) => (
-                  <p key={i} className="text-gray-400 text-sm mb-3 max-w-xs font-medium leading-relaxed">{addr}</p>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex gap-8 group">
-              <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-[20px] flex items-center justify-center flex-shrink-0 group-hover:border-gold group-hover:bg-gold/5 transition-all duration-500">
-                <Phone className="text-gold" />
-              </div>
-              <div>
-                <h4 className="text-xs font-black uppercase tracking-widest text-gold mb-2 opacity-60">Property Hotline</h4>
-                <p className="text-white text-xl font-bold font-display">+91-9700477222</p>
-              </div>
+              <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-[20px] flex items-center justify-center flex-shrink-0 group-hover:border-gold transition-all duration-500"><Phone className="text-gold" /></div>
+              <div><h4 className="text-xs font-black uppercase tracking-widest text-gold mb-2 opacity-60">Property Hotline</h4><p className="text-white text-xl font-bold font-display">+91-9700477222</p></div>
             </div>
           </div>
         </div>
-        
-        <div className="bg-white rounded-[48px] p-8 md:p-14 shadow-2xl border border-gray-100 animate-fade-in-right">
+        <div className="bg-white rounded-[48px] p-8 md:p-14 shadow-2xl border border-gray-100">
           <form className="space-y-8">
             <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Your Full Name</label>
-                <input type="text" className="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl text-navy focus:outline-none focus:ring-2 focus:ring-gold focus:bg-white transition" placeholder="John Doe" />
-              </div>
-              <div>
-                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Contact Number</label>
-                <input type="tel" className="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl text-navy focus:outline-none focus:ring-2 focus:ring-gold focus:bg-white transition" placeholder="+91" />
-              </div>
+              <div><label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Full Name</label><input type="text" className="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl text-navy focus:outline-none focus:ring-2 focus:ring-gold" placeholder="Your Name" /></div>
+              <div><label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Number</label><input type="tel" className="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl text-navy focus:outline-none focus:ring-2 focus:ring-gold" placeholder="+91" /></div>
             </div>
-            <div>
-              <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Interested Property</label>
-              <select className="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl text-navy focus:outline-none focus:ring-2 focus:ring-gold focus:bg-white transition appearance-none cursor-pointer">
-                <option>Select a Masterpiece</option>
-                {VENTURES.map(v => <option key={v.id}>{v.name}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Specific Requirements</label>
-              <textarea className="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl text-navy focus:outline-none focus:ring-2 focus:ring-gold focus:bg-white transition" rows={4} placeholder="Your vision for the investment..."></textarea>
-            </div>
-            <button className="w-full py-6 bg-navy text-gold rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-navy-light transition shadow-2xl shadow-gold/10 border border-gold/30">
-              Submit Private Inquiry
-            </button>
+            <button className="w-full py-6 bg-navy text-gold rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-navy-light transition border border-gold/30">Submit Private Inquiry</button>
           </form>
         </div>
       </div>
@@ -436,48 +391,10 @@ const Footer = () => (
   <footer className="bg-navy-dark text-gray-500 py-20 border-t border-white/5">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid md:grid-cols-4 gap-16 items-start mb-20">
-        <div className="col-span-1 md:col-span-2">
-          <Logo textColor="text-white" className="mb-8" />
-          <p className="text-sm leading-relaxed max-w-sm font-medium opacity-60">
-            A premium name in Visakhapatnam real estate since 2017. We transform untouched landscapes into high-value gated communities that offer the perfect balance of luxury and nature.
-          </p>
-          <div className="mt-10 flex items-center gap-4">
-            <a href="#" className="w-12 h-12 rounded-2xl border border-white/10 flex items-center justify-center hover:bg-gold hover:text-navy hover:border-gold transition-all duration-300"><Facebook size={20} /></a>
-            <a href="#" className="w-12 h-12 rounded-2xl border border-white/10 flex items-center justify-center hover:bg-gold hover:text-navy hover:border-gold transition-all duration-300"><Instagram size={20} /></a>
-            <a href="#" className="w-12 h-12 rounded-2xl border border-white/10 flex items-center justify-center hover:bg-gold hover:text-navy hover:border-gold transition-all duration-300"><Linkedin size={20} /></a>
-          </div>
-        </div>
-        
-        <div>
-          <h4 className="text-white font-black mb-8 uppercase text-xs tracking-[0.2em]">Navigational</h4>
-          <div className="flex flex-col gap-5 text-sm font-bold">
-            <a href="#home" className="hover:text-gold transition">Our Story</a>
-            <a href="#ventures" className="hover:text-gold transition">Signature Portfolio</a>
-            <a href="#about" className="hover:text-gold transition">Investment Advisory</a>
-            <a href="#contact" className="hover:text-gold transition">Support Center</a>
-          </div>
-        </div>
-        
-        <div>
-          <h4 className="text-white font-black mb-8 uppercase text-xs tracking-[0.2em]">Our Presence</h4>
-          <div className="flex flex-col gap-5 text-xs font-bold leading-relaxed">
-            <p>NAD, Visakhapatnam</p>
-            <p>Seethammapeta Road, Vizag</p>
-            <p className="text-gold pt-4">Call: +91 9700477222</p>
-          </div>
-        </div>
+        <div className="col-span-1 md:col-span-2"><Logo textColor="text-white" className="mb-8" /><p className="text-sm opacity-60 max-w-sm">Premium real estate since 2017. Gated communities that balance luxury and nature.</p></div>
+        <div><h4 className="text-white font-black mb-8 uppercase text-xs tracking-[0.2em]">Presence</h4><p className="text-xs leading-relaxed">NAD, Visakhapatnam<br />Seethammapeta Road, Vizag</p></div>
       </div>
-      
-      <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] uppercase font-black tracking-[0.3em]">
-        <div className="opacity-40">
-          © {new Date().getFullYear()} Gomatha Realtors. Licensed DTCP Layouts.
-        </div>
-        <div className="flex gap-12 opacity-40">
-          <a href="#" className="hover:text-gold transition">Privacy Policy</a>
-          <a href="#" className="hover:text-gold transition">Terms of Use</a>
-          <a href="#" className="hover:text-gold transition">Compliance</a>
-        </div>
-      </div>
+      <div className="pt-10 border-t border-white/5 text-[10px] uppercase font-black tracking-[0.3em] text-center opacity-40">© {new Date().getFullYear()} Gomatha Realtors. Licensed DTCP Layouts.</div>
     </div>
   </footer>
 );
@@ -490,35 +407,17 @@ const App: React.FC = () => {
       <Navbar onLogoClick={() => setSelectedVenture(null)} />
       
       <main>
-        <Hero onExplore={() => {
-          const section = document.getElementById('ventures');
-          section?.scrollIntoView({ behavior: 'smooth' });
-        }} />
+        <Hero onExplore={() => document.getElementById('ventures')?.scrollIntoView({ behavior: 'smooth' })} />
         <About />
         <VenturesSection onProjectSelect={setSelectedVenture} />
         
         {/* Statistics Banner */}
-        <section className="bg-navy py-24 relative overflow-hidden border-y border-gold/20">
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-16 text-center">
-              <div className="group">
-                <div className="text-6xl font-display font-bold text-gold mb-4 transition-transform group-hover:scale-110 duration-500">7+</div>
-                <div className="text-[10px] uppercase font-black tracking-[0.4em] text-gray-400">Total Ventures</div>
-              </div>
-              <div className="group">
-                <div className="text-6xl font-display font-bold text-gold mb-4 transition-transform group-hover:scale-110 duration-500">3</div>
-                <div className="text-[10px] uppercase font-black tracking-[0.4em] text-gray-400">Running Projects</div>
-              </div>
-              <div className="group">
-                <div className="text-6xl font-display font-bold text-gold mb-4 transition-transform group-hover:scale-110 duration-500">100%</div>
-                <div className="text-[10px] uppercase font-black tracking-[0.4em] text-gray-400">Vaasthu Compliance</div>
-              </div>
-              <div className="group">
-                <div className="text-6xl font-display font-bold text-gold mb-4 transition-transform group-hover:scale-110 duration-500">500+</div>
-                <div className="text-[10px] uppercase font-black tracking-[0.4em] text-gray-400">Elite Investors</div>
-              </div>
-            </div>
+        <section className="bg-navy py-24 border-y border-gold/20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-16 text-center">
+            <div className="group"><div className="text-6xl font-display font-bold text-gold mb-4">7+</div><div className="text-[10px] uppercase font-black tracking-[0.4em] text-gray-400">Ventures</div></div>
+            <div className="group"><div className="text-6xl font-display font-bold text-gold mb-4">3</div><div className="text-[10px] uppercase font-black tracking-[0.4em] text-gray-400">Running</div></div>
+            <div className="group"><div className="text-6xl font-display font-bold text-gold mb-4">100%</div><div className="text-[10px] uppercase font-black tracking-[0.4em] text-gray-400">Vaasthu</div></div>
+            <div className="group"><div className="text-6xl font-display font-bold text-gold mb-4">500+</div><div className="text-[10px] uppercase font-black tracking-[0.4em] text-gray-400">Investors</div></div>
           </div>
         </section>
 
@@ -545,10 +444,10 @@ const App: React.FC = () => {
           to { opacity: 1; transform: translateX(0); }
         }
         .animate-fade-in-up {
-          animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         .animate-fade-in-right {
-          animation: fade-in-right 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          animation: fade-in-right 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
       `}</style>
     </div>

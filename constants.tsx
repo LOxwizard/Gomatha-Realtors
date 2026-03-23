@@ -18,8 +18,7 @@ export const VENTURES: Venture[] = [
       '100% Clear Title & Vasthu',
       'Drainage Facility'
     ],
-    // Updated: Pointing to local public folder file
-    imageUrl: '/bitra-colony.mp4', 
+    imageUrl: '/Bitra-Colony.jpg', 
     price: 'Contact for Price'
   },
   {
@@ -39,13 +38,13 @@ export const VENTURES: Venture[] = [
       'Resorts & Guest Houses'
     ],
     // Updated: Pointing to local public folder file
-    imageUrl: '/siri-chandana.mp4',
+    imageUrl: '/Siri-Chandana-Gardens.jpg',
     price: '5,999/-',
     sqyds: 'Per Sq. Yd'
   },
   {
-    id: 'pendurthi-chintalapalem',
-    name: 'Pendurthi Chintalapalem',
+    id: 'Kubera Phase-1',
+    name: 'Kubera Phase-1',
     location: 'Chintalapalem, Pendurthi, Visakhapatnam',
     description: 'New 2026 launch. Premium independent house plots just 4km from Pendurthi Junction and near 150ft main road.',
     status: VentureStatus.RUNNING,
@@ -59,21 +58,24 @@ export const VENTURES: Venture[] = [
       'Compound Wall',
       '24/7 Gated Security'
     ],
-    // Updated: Pointing to local public folder file
     imageUrl: '/pendurthi.mp4',
     price: '11,999/-',
     sqyds: 'Per Sq. Yd'
   },
   {
-    id: 'sree-gomatha',
-    name: 'Sree Gomatha Realtors',
-    location: 'Duddupalem Village, Chodavaram Mandal',
-    description: 'Successfully completed plotted venture with clear titles and developed infrastructure.',
-    status: VentureStatus.COMPLETED,
-    features: ['25 Feet Wide Roads', 'Vaasthu Compliant', 'Clear Title', 'Corner Bits Available'],
-    // Kept as image since it is a completed project
-    imageUrl: 'https://images.unsplash.com/photo-1592595894597-154922037a50?auto=format&fit=crop&q=80&w=800',
-    price: 'Sold Out'
+    id: 'siri-lake-view-gardens',
+    name: 'Siri Lake View Gardens',
+    location: 'Devarapalli, Visakhapatnam',
+    description: 'Premium residential project with stunning lake views and modern amenities.',
+    status: VentureStatus.RUNNING,
+    features: [
+      'Lake View Properties',
+      'Modern Amenities',
+      'Gated Community',
+      '24/7 Security'
+    ],
+    imageUrl: '/siri-lake-view.jpg',
+    price: 'Contact for Price'
   }
 ];
 
