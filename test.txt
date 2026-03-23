@@ -1,0 +1,440 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  Building2, MapPin, Phone, Mail, CheckCircle2, Trees, 
+  ShieldCheck, Zap, ArrowRight, Menu, X, Facebook, 
+  Instagram, Linkedin, ArrowLeft, Loader2, MessageCircle,
+  Download, Image as ImageIcon
+} from 'lucide-react';
+
+/* --- UPDATED TYPES & DATA --- */
+enum VentureStatus {
+  RUNNING = "RUNNING",
+  COMPLETED = "COMPLETED"
+}
+
+interface Venture {
+  id: number;
+  name: string;
+  location: string;
+  description: string;
+  price: string;
+  sqyds: string;
+  status: VentureStatus;
+  imageUrl: string;
+  brochureUrl: string; 
+  gallery: string[];   
+  features: string[];
+}
+
+const VENTURES: Venture[] = [
+  {
+    id: 1,
+    name: "Bitra Colony",
+    location: "Venkannapalem, Chodavaram, Visakhapatnam",
+    description: "An elite gated community offering a 360° hill view and premium infrastructure for a peaceful lifestyle.",
+    price: "Contact",
+    sqyds: "for Price",
+    status: VentureStatus.RUNNING,
+    imageUrl: "/Bitra-Colony/Bitra-Colony.jpg",
+    brochureUrl: "/brochures/bitra_colony.pdf", 
+    gallery: [
+      "/Bitra-Colony/1.jpg", "/Bitra-Colony/2.jpg", "/Bitra-Colony/3.jpg",
+      "/Bitra-Colony/4.jpg", "/Bitra-Colony/5.jpg", "/Bitra-Colony/6.jpg",
+      "/Bitra-Colony/7.jpg", "/Bitra-Colony/8.jpg", "/Bitra-Colony/9.jpg",
+      "/Bitra-Colony/10.jpg", "/Bitra-Colony/11.jpg"
+    ],
+    features: ["40 & 33 Feet BT Roads", "Gated Community", "360° Hill View", "Drainage System", "Electricity"]
+  },
+  {
+    id: 2,
+    name: "Siri Chandana Gardens",
+    location: "Singamdorapalem, K.Kotapadu, Visakhapatnam",
+    description: "A sustainable investment featuring White Sandalwood and Mahogany plantations with high returns.",
+    price: "5,999",
+    sqyds: "per Sq. Yd",
+    status: VentureStatus.RUNNING,
+    imageUrl: "/Siri-Chandana-Gardens/Siri-Chandana-Gardens.jpg",
+    brochureUrl: "/brochures/Siri_Chandana_Gardens Brochure.pdf",
+    gallery: [
+      "/Siri-Chandana-Gardens/1.jpg", "/Siri-Chandana-Gardens/2.jpg", "/Siri-Chandana-Gardens/3.jpg",
+      "/Siri-Chandana-Gardens/4.jpg", "/Siri-Chandana-Gardens/5.jpg", "/Siri-Chandana-Gardens/6.jpg",
+      "/Siri-Chandana-Gardens/7.jpg", "/Siri-Chandana-Gardens/8.jpg", "/Siri-Chandana-Gardens/9.jpg",
+      "/Siri-Chandana-Gardens/10.jpg"
+    ],
+    features: ["White Sandal Plantation", "Mahogany Plantation", "100% Vasthu", "24/7 Security", "Avenue Plantation"]
+  },
+  {
+    id: 3,
+    name: "Kubera Phase-1",
+    location: "Chintalapalem, Pendurthi, Visakhapatnam",
+    description: "Strategically located near Pendurthi Junction, offering excellent connectivity and growth potential.",
+    price: "11,500",
+    sqyds: "per Sq. Yd",
+    status: VentureStatus.RUNNING,
+    imageUrl: "/pendurthi.jpg",
+    brochureUrl: "/brochures/Kubera Phase-1 Brochure.pdf",
+    gallery: [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000"
+    ],
+    features: ["Near Pendurthi Junction", "Black Top Roads", "Street Lights", "Clear Title", "Immediate Registration"]
+  },
+  {
+    id: 4,
+    name: "Siri Lake View Gardens",
+    location: "K.Kotapadu, Visakhapatnam",
+    description: "A serene residential project offering a peaceful lake view and modern amenities.",
+    price: "Contact for Price",
+    sqyds: "Out",
+    status: VentureStatus.RUNNING,
+    imageUrl: "/Siri-Lake-View-Gardens/siri-lake-view.jpg",
+    brochureUrl: "/brochures/Siri_Lake_View_Gardens Brochure.pdf",
+    gallery: [
+      "/Siri-Lake-View-Gardens/1.jpg", "/Siri-Lake-View-Gardens/2.jpg", "/Siri-Lake-View-Gardens/3.jpg",
+      "/Siri-Lake-View-Gardens/4.jpg", "/Siri-Lake-View-Gardens/5.jpg", "/Siri-Lake-View-Gardens/6.jpg",
+      "/Siri-Lake-View-Gardens/7.jpg", "/Siri-Lake-View-Gardens/8.jpg", "/Siri-Lake-View-Gardens/9.jpg",
+      "/Siri-Lake-View-Gardens/10.jpg"
+    ],
+    features: ["25 Feet Wide Roads", "Clear Title", "Fully Developed", "Ready for Construction"]
+  }
+];
+
+const COMPANY_DETAILS = {
+  phone: "+919700477222",
+  whatsapp: "919700477222",
+  email: "gomatharealtors@gmail.com"
+};
+
+/* --- COMPONENTS --- */
+
+const Logo = ({ textColor = "text-navy" }: { textColor?: string }) => (
+  <div className="flex items-center gap-2">
+    <svg viewBox="0 0 100 100" className="w-10 h-10 drop-shadow-lg">
+      <path d="M20 70 L50 30 L80 70" fill="none" stroke="#d4af37" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M35 70 L50 50 L65 70" fill="none" stroke="#d4af37" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10 80 L90 80" fill="none" stroke="#d4af37" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+    <div className="flex flex-col -gap-1">
+      <span className={`text-lg font-bold ${textColor} uppercase tracking-tight`}>Gomatha</span>
+      <span className={`text-xs font-medium ${textColor} tracking-[0.2em] uppercase opacity-80`}>Realtors</span>
+    </div>
+  </div>
+);
+
+const EnquiryModal = ({ projectName, onClose }: { projectName: string, onClose: () => void }) => {
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleWhatsAppChat = () => {
+    const message = encodeURIComponent(`Hi Gomatha Realtors, I am interested in "${projectName}". Please share more details.`);
+    window.open(`https://wa.me/${COMPANY_DETAILS.whatsapp}?text=${message}`, '_blank');
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      projectName: projectName,
+      name: formData.get('name'),
+      phone: formData.get('phone'),
+      message: formData.get('message'),
+    };
+
+    try {
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxE1OzO9XbH2Qrf6PKmHRFDI7woJVH_7M2OohSuL654WpBrNVV5HnRD_xnj19T_7hJV/exec'; 
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', 
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      setSubmitted(true);
+      setTimeout(() => onClose(), 3000);
+    } catch (error) {
+      alert("Submission failed. Please use WhatsApp.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-navy/95 backdrop-blur-md" onClick={onClose} />
+      <div className="relative w-full max-w-xl bg-white rounded-[40px] shadow-2xl overflow-hidden animate-fade-in-up p-8 md:p-14">
+        {submitted ? (
+          <div className="text-center py-10 animate-fade-in-up">
+            <CheckCircle2 size={60} className="text-green-500 mx-auto mb-4" />
+            <h3 className="text-3xl font-bold text-navy">Inquiry Received!</h3>
+            <p className="text-gray-500 mt-2">Data synced to Google Sheets. Closing...</p>
+          </div>
+        ) : (
+          <>
+            <div className="flex justify-between items-start mb-8">
+              <div>
+                <span className="text-gold font-black text-[10px] uppercase tracking-widest mb-1 block">Property Inquiry</span>
+                <h3 className="text-2xl font-bold text-navy">{projectName}</h3>
+              </div>
+              <button onClick={onClose} className="text-navy p-2 hover:bg-gray-100 rounded-full transition"><X size={24} /></button>
+            </div>
+            
+            <button onClick={handleWhatsAppChat} className="w-full mb-8 py-4 bg-[#25D366] text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:scale-[1.02] transition">
+              <MessageCircle size={20} /> Chat on WhatsApp
+            </button>
+
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              <div className="grid md:grid-cols-2 gap-4">
+                <input name="name" required className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:ring-2 focus:ring-gold" placeholder="Your Name" />
+                <input name="phone" required type="tel" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:ring-2 focus:ring-gold" placeholder="Contact Number" />
+              </div>
+              <textarea name="message" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:ring-2 focus:ring-gold" rows={3} placeholder="Tell us your requirements..."></textarea>
+              <button disabled={loading} type="submit" className="w-full py-5 bg-navy text-gold rounded-xl font-bold uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-navy-light transition shadow-lg">
+                {loading ? <Loader2 className="animate-spin" /> : "Submit to Sheet"}
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () => void }) => {
+  const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  return (
+    <div className="fixed inset-0 z-[100] bg-navy overflow-y-auto">
+      <div className="absolute inset-0 z-0 opacity-30">
+        <img src={venture.imageUrl} className="w-full h-full object-cover" alt={venture.name} />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/60 to-transparent"></div>
+      </div>
+
+      <div className="relative z-10 p-6 md:p-10 flex flex-col min-h-screen">
+        <button onClick={onBack} className="text-gold font-bold uppercase tracking-widest text-xs flex items-center gap-2 mb-10 self-start px-6 py-3 bg-white/5 backdrop-blur-md rounded-full border border-white/10 hover:bg-gold hover:text-navy transition group">
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Ventures
+        </button>
+
+        <div className="max-w-7xl mx-auto w-full py-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-start mb-20">
+            <div className="animate-fade-in-up">
+              <span className="px-4 py-1.5 gold-gradient text-navy text-[10px] font-black uppercase rounded-full mb-6 inline-block">{venture.status}</span>
+              <h1 className="text-6xl text-white font-display font-bold mb-6 leading-tight">{venture.name}</h1>
+              <p className="text-xl text-gray-300 mb-10 leading-relaxed">{venture.description}</p>
+              
+              <div className="flex flex-wrap gap-4 mb-10">
+                <button onClick={() => setIsEnquiryOpen(true)} className="px-10 py-5 gold-gradient text-navy font-bold rounded-2xl shadow-2xl hover:brightness-110 transition">
+                  Enquire Now
+                </button>
+                <a 
+                  href={venture.brochureUrl} 
+                  download 
+                  className="px-10 py-5 bg-white/10 backdrop-blur-md text-white border border-white/20 font-bold rounded-2xl flex items-center gap-3 hover:bg-white hover:text-navy transition"
+                >
+                  <Download size={20} /> Brochure
+                </a>
+              </div>
+            </div>
+
+            <div className="bg-navy/80 backdrop-blur-xl rounded-[40px] p-8 md:p-12 border border-white/10 shadow-2xl">
+              <h3 className="text-2xl font-display text-white mb-8 border-b border-white/10 pb-6">Highlights</h3>
+              <div className="grid sm:grid-cols-2 gap-6">
+                {venture.features.map((f, i) => (
+                  <div key={i} className="flex items-center gap-4 text-gray-300">
+                    <CheckCircle2 size={16} className="text-gold" /> <span className="text-sm">{f}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-10 pt-8 border-t border-white/10">
+                <div className="text-xs uppercase text-gold font-bold mb-2 opacity-60">Investment Starting</div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl font-display text-white">₹{venture.price}</span>
+                  <span className="text-gold font-medium">{venture.sqyds}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* SITE GALLERY SECTION */}
+          <div className="mt-20 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            <div className="flex items-center gap-4 mb-10">
+              <div className="w-12 h-12 bg-gold/10 rounded-2xl flex items-center justify-center text-gold">
+                <ImageIcon size={24} />
+              </div>
+              <h2 className="text-4xl text-white font-display font-bold">Site Gallery</h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {venture.gallery.map((img, i) => (
+                <div key={i} className="relative aspect-video rounded-[32px] overflow-hidden border border-white/10 group">
+                  <img 
+                    src={img} 
+                    className="w-full h-full object-cover transition duration-700 group-hover:scale-110" 
+                    alt={`Site view ${i + 1}`}
+                    onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000'; }}
+                  />
+                  <div className="absolute inset-0 bg-navy/20 group-hover:bg-transparent transition duration-500"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {isEnquiryOpen && <EnquiryModal projectName={venture.name} onClose={() => setIsEnquiryOpen(false)} />}
+    </div>
+  );
+};
+
+/* --- MAIN APP STRUCTURE --- */
+const Navbar = ({ onLogoClick }: { onLogoClick: () => void }) => (
+  <nav className="fixed w-full z-50 bg-white/95 backdrop-blur-md h-20 flex items-center border-b border-gray-100">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex justify-between items-center">
+      <button onClick={onLogoClick}><Logo /></button>
+      <div className="hidden md:flex items-center space-x-8 text-sm font-semibold text-gray-700">
+        <a href="#home" className="hover:text-gold transition">Home</a>
+        <a href="#about" className="hover:text-gold transition">About</a>
+        <a href="#ventures" className="hover:text-gold transition">Ventures</a>
+        <a href="#contact" className="bg-navy text-gold px-6 py-2.5 rounded-full font-bold hover:bg-navy-light transition">Contact</a>
+      </div>
+    </div>
+  </nav>
+);
+
+const App: React.FC = () => {
+  const [selectedVenture, setSelectedVenture] = useState<Venture | null>(null);
+
+  return (
+    <div className="min-h-screen bg-gray-50 selection:bg-gold/30 selection:text-navy">
+      <Navbar onLogoClick={() => setSelectedVenture(null)} />
+      
+      <main>
+        {/* HERO SECTION */}
+        <section id="home" className="relative h-[90vh] flex items-center pt-20 overflow-hidden">
+          <div className="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover" alt="Banner" />
+            <div className="absolute inset-0 bg-navy/70" />
+          </div>
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white w-full">
+            <div className="max-w-2xl animate-fade-in-up">
+              <span className="px-4 py-1.5 gold-gradient text-navy text-[10px] font-black uppercase rounded-full shadow-xl">Established 2017</span>
+              <h1 className="text-5xl md:text-7xl font-display leading-tight my-6 font-bold">Hill View Living <br /><span className="text-gold">With Nature</span></h1>
+              <p className="text-lg text-gray-300 mb-10 max-w-lg leading-relaxed">Premium open plots and independent houses in Visakhapatnam. Your investment for today, security for tomorrow.</p>
+              <button onClick={() => document.getElementById('ventures')?.scrollIntoView({behavior:'smooth'})} className="bg-gold text-navy px-8 py-4 rounded-full font-bold flex items-center gap-2 group">
+                Explore Ventures <ArrowRight className="group-hover:translate-x-1 transition" />
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* ABOUT SECTION */}
+        <section id="about" className="py-24 bg-white overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-16 items-center">
+            <div className="relative">
+              <img src="https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&q=80&w=600" className="rounded-[40px] shadow-2xl" alt="About" />
+              <div className="absolute -bottom-6 -right-6 bg-navy p-8 rounded-[32px] text-gold border border-gold/30 shadow-2xl">
+                <div className="text-4xl font-bold">7+</div>
+                <div className="text-[10px] uppercase font-black tracking-widest">Ventures Delivered</div>
+              </div>
+            </div>
+            <div className="animate-fade-in-up">
+              <span className="text-gold font-black uppercase tracking-widest text-xs">Trusted Excellence</span>
+              <h2 className="text-4xl md:text-5xl font-display text-navy my-6 font-bold">Building Your Legacy <br /> with <span className="text-gold">Integrity</span></h2>
+              <p className="text-gray-600 mb-8 text-lg leading-relaxed">Gomatha Realtors is a premier real estate development firm in Visakhapatnam. Since 2017, we have been committed to delivering high-growth potential layouts with modern amenities while preserving the natural beauty of the landscape.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div className="flex gap-4"><ShieldCheck className="text-gold shrink-0" /> <div><h4 className="font-bold text-navy text-sm uppercase">Legal Guarantee</h4><p className="text-xs text-gray-500">100% Clear Titles & Docs</p></div></div>
+                <div className="flex gap-4"><Trees className="text-gold shrink-0" /> <div><h4 className="font-bold text-navy text-sm uppercase">Eco-Friendly</h4><p className="text-xs text-gray-500">Lush Greenery & Parks</p></div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* VENTURES SECTION */}
+        <section id="ventures" className="py-24 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-16">
+            <span className="text-gold font-black uppercase text-xs tracking-[0.3em]">Signature Portfolio</span>
+            <h2 className="text-4xl font-display text-navy mt-4 font-bold">Masterpiece Developments</h2>
+          </div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-10">
+            {VENTURES.map(v => (
+              <div key={v.id} onClick={() => setSelectedVenture(v)} className="bg-white rounded-[40px] overflow-hidden shadow-sm hover:shadow-2xl transition-all cursor-pointer group border border-gray-100">
+                <div className="h-72 overflow-hidden relative">
+                  <img src={v.imageUrl} className="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt={v.name} />
+                  <span className="absolute top-6 right-6 px-4 py-1.5 bg-navy/80 text-gold text-[10px] font-black uppercase rounded-full border border-gold/30 backdrop-blur-md">{v.status}</span>
+                </div>
+                <div className="p-8">
+                  <div className="flex items-center gap-2 text-gold text-[10px] font-black uppercase mb-3"><MapPin size={14}/> {v.location}</div>
+                  <h3 className="text-2xl font-bold text-navy group-hover:text-gold transition mb-4">{v.name}</h3>
+                  <div className="flex justify-between items-center pt-6 border-t border-gray-50">
+                    <div><div className="text-[10px] text-gray-400 font-bold uppercase">Price From</div><div className="text-lg font-bold text-navy">₹{v.price}</div></div>
+                    <div className="w-12 h-12 bg-navy text-gold rounded-2xl flex items-center justify-center group-hover:bg-gold transition shadow-lg"><ArrowRight size={20}/></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CONTACT SECTION */}
+        <section id="contact" className="py-24 bg-navy text-white relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-20 relative z-10">
+            <div>
+              <h2 className="text-5xl font-display mb-10 font-bold">Secure Your <br /><span className="text-gold italic">Future Investment</span></h2>
+              <div className="space-y-10">
+                <div className="flex gap-8 group">
+                  <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center shrink-0 group-hover:border-gold transition-all duration-500"><Mail className="text-gold" /></div>
+                  <div><h4 className="text-xs font-black uppercase tracking-widest text-gold mb-2 opacity-60">General Enquiry</h4><p className="text-white text-lg font-bold">{COMPANY_DETAILS.email}</p></div>
+                </div>
+                <div className="flex gap-8 group">
+                  <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center shrink-0 group-hover:border-gold transition-all duration-500"><Phone className="text-gold" /></div>
+                  <div><h4 className="text-xs font-black uppercase tracking-widest text-gold mb-2 opacity-60">Property Hotline</h4><p className="text-white text-2xl font-bold font-display">{COMPANY_DETAILS.phone}</p></div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white rounded-[48px] p-8 md:p-14 shadow-2xl border border-gray-100 text-navy">
+              <h3 className="text-2xl font-bold mb-8">Send us a Message</h3>
+              <form className="space-y-6">
+                 <div className="grid md:grid-cols-2 gap-6">
+                    <input className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-gold outline-none" placeholder="Your Name" />
+                    <input className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-gold outline-none" placeholder="Contact Number" />
+                 </div>
+                 <textarea className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-gold outline-none" rows={4} placeholder="Your message..."></textarea>
+                 <button className="w-full py-5 bg-navy text-gold font-bold uppercase rounded-xl border border-gold/30 shadow-xl hover:bg-navy-light transition">Send Inquiry</button>
+              </form>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* FOOTER */}
+      <footer className="bg-navy py-12 border-t border-white/5 text-center px-4">
+        <Logo textColor="text-white" />
+        <div className="mt-8 flex justify-center gap-6 mb-8 text-gray-500">
+          <Facebook size={20} className="hover:text-gold cursor-pointer transition" />
+          <Instagram size={20} className="hover:text-gold cursor-pointer transition" />
+          <Linkedin size={20} className="hover:text-gold cursor-pointer transition" />
+        </div>
+        <div className="text-[10px] uppercase font-black tracking-[0.3em] text-gray-500">
+          © {new Date().getFullYear()} Gomatha Realtors. Licensed DTCP & VUDA Layouts.
+        </div>
+      </footer>
+
+      {selectedVenture && <ProjectDetailView venture={selectedVenture} onBack={() => setSelectedVenture(null)} />}
+
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        @keyframes fade-in-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fade-in-up 0.8s ease-out forwards; }
+        .gold-gradient { background: linear-gradient(135deg, #d4af37 0%, #f1d592 50%, #d4af37 100%); }
+        .font-display { font-family: 'Playfair Display', serif; }
+        .bg-navy { background-color: #000033; }
+        .bg-navy-light { background-color: #00004d; }
+        .text-navy { color: #000033; }
+        .text-gold { color: #d4af37; }
+      `}</style>
+    </div>
+  );
+};
+
+export default App;
