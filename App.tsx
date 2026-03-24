@@ -90,7 +90,6 @@ const COMPANY_DETAILS = {
   whatsapp: "919700477222",
   email: "gomatharealtors@gmail.com",
   address: "NAD Junction, Visakhapatnam",
-  // Unified script URL
   SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbw7pSY0YHMKNNrvwIHSO4stcm7jPHRRMR1phBrlYN10ETJEh3rLYjUlmf0KHTnYTeiq/exec'
 };
 
@@ -247,13 +246,11 @@ const App: React.FC = () => {
   const [contactLoading, setContactLoading] = useState(false);
   const [contactSubmitted, setContactSubmitted] = useState(false);
 
-  // FIXED: Logic updated to send full data properly to the sheet
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setContactLoading(true);
     const formData = new FormData(e.currentTarget);
     
-    // Ensure keys match what your Code.gs script expects
     const data = { 
       projectName: "General Website Inquiry", 
       name: formData.get('name'), 
@@ -270,7 +267,6 @@ const App: React.FC = () => {
       
       setContactSubmitted(true);
       (e.target as HTMLFormElement).reset();
-      // Auto close the floating confirmation after 4 seconds
       setTimeout(() => setContactSubmitted(false), 4000);
     } catch (error) {
       alert("Submission failed. Please try again or use WhatsApp.");
@@ -347,7 +343,7 @@ const App: React.FC = () => {
                   <div className="flex items-center gap-2 text-gold text-[10px] font-black uppercase mb-4"><MapPin size={14}/> {v.location}</div>
                   <h3 className="text-3xl font-bold text-white group-hover:text-gold transition mb-4">{v.name}</h3>
                   <div className="flex justify-between items-center pt-6 border-t border-white/5">
-                    <div className="text-xl font-bold text-white">₹{v.price}</div>
+                    <div className="text-xl font-bold text-white">₹{v.price} <span className="text-sm font-serif text-yellow-600">per Sq. Yd</span></div>
                     <div className="w-12 h-12 bg-white/5 text-gold rounded-full flex items-center justify-center group-hover:bg-gold group-hover:text-navy transition"><ArrowRight size={20}/></div>
                   </div>
                 </div>
@@ -397,7 +393,6 @@ const App: React.FC = () => {
         <Logo /><p className="text-[10px] uppercase font-black tracking-[0.4em] mt-8 opacity-40">© {new Date().getFullYear()} Gomatha Realtors. Licensed DTCP & VUDA Layouts.</p>
       </footer>
 
-      {/* FLOATING SUCCESS POPUP FOR CONTACT SECTION */}
       {contactSubmitted && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 animate-fade-in">
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setContactSubmitted(false)} />
