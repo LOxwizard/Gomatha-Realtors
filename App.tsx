@@ -37,7 +37,7 @@ const VENTURES: Venture[] = [
     sqyds: "per Sq. Yd",
     status: VentureStatus.RUNNING,
     imageUrl: "/Bitra-Colony/Bitra-Colony.jpg",
-    brochureUrl: "/brochures/bitra_colony.pdf", 
+    brochureUrl: "/brochures/Bitra-Colony Brochure.pdf", 
     layoutUrl: "/Bitra-Colony/Bitra_Colony_Layout-copy.pdf",
     gallery: ["/Bitra-Colony/1.jpg", "/Bitra-Colony/2.jpg", "/Bitra-Colony/3.jpg", "/Bitra-Colony/4.jpg", "/Bitra-Colony/5.jpg", "/Bitra-Colony/6.jpg", "/Bitra-Colony/7.jpg", "/Bitra-Colony/8.jpg", "/Bitra-Colony/9.jpg", "/Bitra-Colony/10.jpg", "/Bitra-Colony/11.jpg"],
     features: ["40 & 33 Feet BT Roads", "Gated Community", "360° Hill View", "Drainage System", "Electricity"]
