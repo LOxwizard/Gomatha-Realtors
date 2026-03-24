@@ -6,7 +6,6 @@ import {
   Download, Image as ImageIcon, FileText, Award, Users, Target
 } from 'lucide-react';
 
-/* --- VENTURE DATA --- */
 enum VentureStatus {
   RUNNING = "RUNNING",
   COMPLETED = "COMPLETED"
@@ -64,10 +63,10 @@ const VENTURES: Venture[] = [
     price: "11,999",
     sqyds: "per Sq. Yd",
     status: VentureStatus.RUNNING,
-    imageUrl: "/Kubera Phase-1/Kubera_phase_1.jpg",
+    imageUrl: "/Kubera Phase-1/Kubera_Phase-1.jpg",
     brochureUrl: "/brochures/Kubera Phase-1 Brochure.pdf",
     layoutUrl: "/Kubera Phase-1/Kubera Phase-1 Layout-copy.pdf",
-    gallery: ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000"],
+    gallery: ["/Kubera Phase-1/1.jpg"],
     features: ["Near Pendurthi Junction", "Black Top Roads", "Street Lights"]
   },
   {
