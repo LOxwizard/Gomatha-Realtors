@@ -89,7 +89,9 @@ const COMPANY_DETAILS = {
   phone: "+91 9700477222",
   whatsapp: "919700477222",
   email: "gomatharealtors@gmail.com",
-  address: "NAD Junction, Visakhapatnam"
+  address: "NAD Junction, Visakhapatnam",
+  // Unified script URL
+  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbw7pSY0YHMKNNrvwIHSO4stcm7jPHRRMR1phBrlYN10ETJEh3rLYjUlmf0KHTnYTeiq/exec'
 };
 
 const openWhatsApp = (msg: string) => {
@@ -119,11 +121,15 @@ const EnquiryModal = ({ projectName, onClose }: { projectName: string, onClose: 
     e.preventDefault();
     setLoading(true);
     const formData = new FormData(e.currentTarget);
-    const data = { projectName, name: formData.get('name'), phone: formData.get('phone'), message: formData.get('message') };
+    const data = { 
+      projectName, 
+      name: formData.get('name'), 
+      phone: formData.get('phone'), 
+      message: formData.get('message') 
+    };
 
     try {
-      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxE1OzO9XbH2Qrf6PKmHRFDI7woJVH_7M2OohSuL654WpBrNVV5HnRD_xnj19T_7hJV/exec'; 
-      await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+      await fetch(COMPANY_DETAILS.SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
       setSubmitted(true);
       setTimeout(() => onClose(), 3000);
     } catch (error) {
@@ -239,26 +245,35 @@ const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () =
 const App: React.FC = () => {
   const [selectedVenture, setSelectedVenture] = useState<Venture | null>(null);
   const [contactLoading, setContactLoading] = useState(false);
+  const [contactSubmitted, setContactSubmitted] = useState(false);
 
-  // New handler for the bottom contact form
+  // FIXED: Logic updated to send full data properly to the sheet
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setContactLoading(true);
     const formData = new FormData(e.currentTarget);
+    
+    // Ensure keys match what your Code.gs script expects
     const data = { 
       projectName: "General Website Inquiry", 
       name: formData.get('name'), 
       phone: formData.get('phone'), 
-      message: "Form submitted via Footer Contact Section" 
+      message: "Visitor submitted through footer contact form." 
     };
 
     try {
-      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxE1OzO9XbH2Qrf6PKmHRFDI7woJVH_7M2OohSuL654WpBrNVV5HnRD_xnj19T_7hJV/exec'; 
-      await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
-      alert("Enquiry sent successfully!");
+      await fetch(COMPANY_DETAILS.SCRIPT_URL, { 
+        method: 'POST', 
+        mode: 'no-cors', 
+        body: JSON.stringify(data) 
+      });
+      
+      setContactSubmitted(true);
       (e.target as HTMLFormElement).reset();
+      // Auto close the floating confirmation after 4 seconds
+      setTimeout(() => setContactSubmitted(false), 4000);
     } catch (error) {
-      alert("Submission failed. Please try again.");
+      alert("Submission failed. Please try again or use WhatsApp.");
     } finally {
       setContactLoading(false);
     }
@@ -350,10 +365,11 @@ const App: React.FC = () => {
                 <div className="flex gap-6"><Phone className="text-gold" /> <div><p className="text-xs uppercase font-bold text-gold opacity-60">Call Us</p><p className="text-white text-2xl font-bold">{COMPANY_DETAILS.phone}</p></div></div>
               </div>
             </div>
-            <div className="bg-[#050a18] border border-white/10 rounded-[48px] p-12 shadow-2xl">
+            <div className="bg-[#050a18] border border-white/10 rounded-[48px] p-12 shadow-2xl text-center">
               <h3 className="text-2xl font-bold text-white mb-8">Get in Touch</h3>
               
               <button 
+                type="button"
                 onClick={() => openWhatsApp("Hi Gomatha Realtors, I'd like to inquire about your current properties.")}
                 className="w-full mb-8 py-4 bg-[#25D366] text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:brightness-105 transition shadow-lg"
               >
@@ -380,6 +396,19 @@ const App: React.FC = () => {
       <footer className="py-16 bg-[#050a18] border-t border-white/5 text-center text-gray-500">
         <Logo /><p className="text-[10px] uppercase font-black tracking-[0.4em] mt-8 opacity-40">© {new Date().getFullYear()} Gomatha Realtors. Licensed DTCP & VUDA Layouts.</p>
       </footer>
+
+      {/* FLOATING SUCCESS POPUP FOR CONTACT SECTION */}
+      {contactSubmitted && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 animate-fade-in">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setContactSubmitted(false)} />
+          <div className="relative bg-[#050a18] border border-gold/30 p-10 rounded-[40px] shadow-2xl text-center max-w-sm w-full animate-fade-in-up">
+            <button onClick={() => setContactSubmitted(false)} className="absolute top-6 right-6 text-white/30 hover:text-white"><X size={20}/></button>
+            <CheckCircle2 size={60} className="text-gold mx-auto mb-6" />
+            <h3 className="text-2xl font-bold text-white mb-2">Message Sent!</h3>
+            <p className="text-gray-400">Our team will reach out to you shortly.</p>
+          </div>
+        </div>
+      )}
 
       {selectedVenture && <ProjectDetailView venture={selectedVenture} onBack={() => setSelectedVenture(null)} />}
 
