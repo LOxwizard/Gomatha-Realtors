@@ -93,12 +93,10 @@ const COMPANY_DETAILS = {
   address: "NAD Junction, Visakhapatnam"
 };
 
-/* --- SHARED UTILS --- */
 const openWhatsApp = (msg: string) => {
   window.open(`https://wa.me/${COMPANY_DETAILS.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
 };
 
-/* --- COMPONENTS --- */
 
 const Logo = () => (
   <div className="flex items-center gap-2">
@@ -125,7 +123,7 @@ const EnquiryModal = ({ projectName, onClose }: { projectName: string, onClose: 
     const data = { projectName, name: formData.get('name'), phone: formData.get('phone'), message: formData.get('message') };
 
     try {
-      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz1olB1rND76QSDFaGdW7f3nLXS6GAfXQRN7aCyQ_M/dev'; 
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxE1OzO9XbH2Qrf6PKmHRFDI7woJVH_7M2OohSuL654WpBrNVV5HnRD_xnj19T_7hJV/exec'; 
       await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
       setSubmitted(true);
       setTimeout(() => onClose(), 3000);
@@ -151,7 +149,6 @@ const EnquiryModal = ({ projectName, onClose }: { projectName: string, onClose: 
               <button onClick={onClose} className="text-white/50 hover:text-white"><X size={24} /></button>
             </div>
             
-            {/* WhatsApp Option inside Modal */}
             <button 
               onClick={() => openWhatsApp(`Hi Gomatha Realtors, I am interested in your project: ${projectName}. Please share more details.`)}
               className="w-full mb-6 py-4 bg-[#25D366] text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:brightness-105 transition shadow-lg"
@@ -242,6 +239,31 @@ const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () =
 
 const App: React.FC = () => {
   const [selectedVenture, setSelectedVenture] = useState<Venture | null>(null);
+  const [contactLoading, setContactLoading] = useState(false);
+
+  // New handler for the bottom contact form
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setContactLoading(true);
+    const formData = new FormData(e.currentTarget);
+    const data = { 
+      projectName: "General Website Inquiry", 
+      name: formData.get('name'), 
+      phone: formData.get('phone'), 
+      message: "Form submitted via Footer Contact Section" 
+    };
+
+    try {
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxE1OzO9XbH2Qrf6PKmHRFDI7woJVH_7M2OohSuL654WpBrNVV5HnRD_xnj19T_7hJV/exec'; 
+      await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+      alert("Enquiry sent successfully!");
+      (e.target as HTMLFormElement).reset();
+    } catch (error) {
+      alert("Submission failed. Please try again.");
+    } finally {
+      setContactLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#050a18] text-gray-300 selection:bg-gold/30 selection:text-white">
@@ -332,7 +354,6 @@ const App: React.FC = () => {
             <div className="bg-[#050a18] border border-white/10 rounded-[48px] p-12 shadow-2xl">
               <h3 className="text-2xl font-bold text-white mb-8">Get in Touch</h3>
               
-              {/* WhatsApp Button for Contact Section */}
               <button 
                 onClick={() => openWhatsApp("Hi Gomatha Realtors, I'd like to inquire about your current properties.")}
                 className="w-full mb-8 py-4 bg-[#25D366] text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:brightness-105 transition shadow-lg"
@@ -345,10 +366,12 @@ const App: React.FC = () => {
                  <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#050a18] px-4 text-[10px] text-gray-500 font-bold uppercase tracking-widest">Or Message Us</span>
               </div>
 
-              <form className="space-y-6">
-                 <input className="w-full p-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:border-gold" placeholder="Your Name" />
-                 <input className="w-full p-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:border-gold" placeholder="Phone Number" />
-                 <button className="w-full py-6 bg-gold text-navy font-bold uppercase rounded-2xl shadow-xl hover:brightness-110 transition">Send Form</button>
+              <form className="space-y-6" onSubmit={handleContactSubmit}>
+                 <input name="name" required className="w-full p-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:border-gold" placeholder="Your Name" />
+                 <input name="phone" required className="w-full p-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:border-gold" placeholder="Phone Number" />
+                 <button type="submit" disabled={contactLoading} className="w-full py-6 bg-gold text-navy font-bold uppercase rounded-2xl shadow-xl hover:brightness-110 transition flex items-center justify-center gap-2">
+                    {contactLoading ? <Loader2 className="animate-spin" /> : "Send Form"}
+                 </button>
               </form>
             </div>
           </div>
