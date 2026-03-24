@@ -122,7 +122,7 @@ const EnquiryModal = ({ projectName, onClose }: { projectName: string, onClose: 
     const data = { projectName, name: formData.get('name'), phone: formData.get('phone'), message: formData.get('message') };
 
     try {
-      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw7pSY0YHMKNNrvwIHSO4stcm7jPHRRMR1phBrlYN10ETJEh3rLYjUlmf0KHTnYTeiq/exec'; 
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxE1OzO9XbH2Qrf6PKmHRFDI7woJVH_7M2OohSuL654WpBrNVV5HnRD_xnj19T_7hJV/exec'; 
       await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
       setSubmitted(true);
       setTimeout(() => onClose(), 3000);
