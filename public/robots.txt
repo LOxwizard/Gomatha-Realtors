@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://gomatha-realtors.in/sitemap.xml
+Sitemap: https://gomatharealtors.in/sitemap.xml
