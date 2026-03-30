@@ -250,16 +250,18 @@ const App: React.FC = () => {
     e.preventDefault();
     setContactLoading(true);
     const formData = new FormData(e.currentTarget);
-    
     const data = { 
       projectName: "General Website Inquiry", 
       name: formData.get('name'), 
       phone: formData.get('phone'), 
-      message: "Visitor submitted through footer contact form." 
+      message: "Form submitted via Footer Contact Section on gomatharealtors.in" 
     };
 
     try {
-      await fetch(COMPANY_DETAILS.SCRIPT_URL, { 
+     
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzCZn_MA8gotaIu1Jd52FD7fb8kcgRDO4Ccx1EX9rnaP6EdC-rh5gNlb_qvfNwATZ55/exec'; 
+      
+      await fetch(SCRIPT_URL, { 
         method: 'POST', 
         mode: 'no-cors', 
         body: JSON.stringify(data) 
@@ -269,11 +271,11 @@ const App: React.FC = () => {
       (e.target as HTMLFormElement).reset();
       setTimeout(() => setContactSubmitted(false), 4000);
     } catch (error) {
-      alert("Submission failed. Please try again or use WhatsApp.");
+      alert("Submission failed. Please try again.");
     } finally {
       setContactLoading(false);
     }
-  };
+};
 
   return (
     <div className="min-h-screen bg-[#050a18] text-gray-300 selection:bg-gold/30 selection:text-white">
