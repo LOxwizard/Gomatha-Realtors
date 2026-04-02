@@ -31,7 +31,7 @@ const VENTURES: Venture[] = [
     id: 1,
     name: "Bitra Colony",
     location: "Venkannapalem, Chodavaram, Visakhapatnam",
-    description: "An elite gated community offering a 360° hill view and premium infrastructure for a peaceful lifestyle.",
+    description: "An elite gated community offering a 360° hill view and premium VUDA approved infrastructure for a peaceful lifestyle in Visakhapatnam.",
     price: "8,500",
     sqyds: "per Sq. Yd",
     status: VentureStatus.RUNNING,
@@ -45,7 +45,7 @@ const VENTURES: Venture[] = [
     id: 2,
     name: "Siri Chandana Gardens",
     location: "Singamdorapalem, K.Kotapadu, Visakhapatnam",
-    description: "A sustainable investment featuring White Sandalwood and Mahogany plantations with high returns.",
+    description: "A sustainable real estate investment featuring White Sandalwood and Mahogany plantations with high returns in the heart of Vizag.",
     price: "5,999",
     sqyds: "per Sq. Yd",
     status: VentureStatus.RUNNING,
@@ -59,21 +59,21 @@ const VENTURES: Venture[] = [
     id: 3,
     name: "Kubera Phase-1",
     location: "Chintalapalem, Pendurthi, Visakhapatnam",
-    description: "Strategically located near Pendurthi Junction, offering excellent connectivity and growth potential.",
+    description: "Strategically located DTCP approved plots near Pendurthi Junction, offering excellent connectivity and growth potential for Vizag investors.",
     price: "11,999",
     sqyds: "per Sq. Yd",
     status: VentureStatus.RUNNING,
-    imageUrl: "/Kubera Phase-1/Kubera_Phase-1.jpg",
+    imageUrl: "/Kubera Phase-1/Kubera_Phase-1(main).jpg",
     brochureUrl: "/brochures/Kubera Phase-1 Brochure.pdf",
     layoutUrl: "/Kubera Phase-1/Kubera Phase-1 Layout-copy.pdf",
-    gallery: ["/Kubera Phase-1/1.jpg"],
+    gallery: ["/Kubera Phase-1/1.jpg", "/Kubera Phase-1/2.jpg", "/Kubera Phase-1/3.jpg", "/Kubera Phase-1/4.jpg", "/Kubera Phase-1/5.jpg", "/Kubera Phase-1/6.jpg", "/Kubera Phase-1/7.jpg", "/Kubera Phase-1/8.jpg", "/Kubera Phase-1/9.jpg", "/Kubera Phase-1/10.jpg","/Kubera Phase-1/11.jpg","/Kubera Phase-1/12.jpg"],
     features: ["Near Pendurthi Junction", "Black Top Roads", "Street Lights"]
   },
   {
     id: 4,
     name: "Siri Lake View Gardens",
     location: "K.Kotapadu, Visakhapatnam",
-    description: "A serene residential project offering a peaceful lake view and modern amenities.",
+    description: "A serene residential gated community project offering a peaceful lake view and modern amenities near Visakhapatnam city.",
     price: "5,999",
     sqyds: "per Sq. Yd",
     status: VentureStatus.RUNNING,
@@ -90,24 +90,25 @@ const COMPANY_DETAILS = {
   whatsapp: "919700477222",
   email: "gomatharealtors@gmail.com",
   address: "NAD Junction, Visakhapatnam",
-  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbw7pSY0YHMKNNrvwIHSO4stcm7jPHRRMR1phBrlYN10ETJEh3rLYjUlmf0KHTnYTeiq/exec'
+  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxE1OzO9XbH2Qrf6PKmHRFDI7woJVH_7M2OohSuL654WpBrNVV5HnRD_xnj19T_7hJV/exec'
 };
 
 const openWhatsApp = (msg: string) => {
   window.open(`https://wa.me/${COMPANY_DETAILS.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
 };
 
-
 const Logo = () => (
-  <div className="flex items-center gap-2">
-    <svg viewBox="0 0 100 100" className="w-10 h-10">
-      <path d="M20 70 L50 30 L80 70" fill="none" stroke="#d4af37" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M35 70 L50 50 L65 70" fill="none" stroke="#d4af37" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M10 80 L90 80" fill="none" stroke="#d4af37" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-    <div className="flex flex-col">
-      <span className="text-lg font-bold text-white uppercase tracking-tight">Gomatha</span>
-      <span className="text-xs font-medium text-gold tracking-[0.2em] uppercase opacity-80">Realtors</span>
+  <div className="flex items-center gap-3 group">
+    <div className="relative h-12 w-12 overflow-hidden rounded-xl bg-white/5 p-1 border border-white/10 group-hover:border-gold/50 transition-all duration-300">
+      <img 
+        src="/Gomatha-Logo.png" 
+        alt="Gomatha Realtors Logo" 
+        className="h-full w-full object-contain brightness-110"
+      />
+    </div>
+    <div className="flex flex-col justify-center">
+      <span className="text-xl font-bold text-white uppercase tracking-tight leading-none group-hover:text-gold transition-colors">Gomatha</span>
+      <span className="text-[10px] font-medium text-gold tracking-[0.25em] uppercase opacity-80 mt-1">Realtors</span>
     </div>
   </div>
 );
@@ -187,7 +188,7 @@ const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () =
   return (
     <div className="fixed inset-0 z-[100] bg-[#050a18] overflow-y-auto animate-fade-in">
       <div className="absolute inset-0 z-0 h-[60vh]">
-        <img src={venture.imageUrl} className="w-full h-full object-cover opacity-40" alt={venture.name} />
+        <img src={venture.imageUrl} className="w-full h-full object-cover opacity-40" alt={`${venture.name} - Premium Plots in Visakhapatnam`} />
         <div className="absolute inset-0 bg-gradient-to-t from-[#050a18] via-[#050a18]/40 to-transparent"></div>
       </div>
 
@@ -230,7 +231,7 @@ const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () =
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {venture.gallery.map((img, i) => (
               <div key={i} className="aspect-video rounded-[32px] overflow-hidden border border-white/10 group">
-                <img src={img} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Site" />
+                <img src={img} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt={`Gomatha Realtors ${venture.name} site view ${i + 1}`} />
               </div>
             ))}
           </div>
@@ -246,6 +247,15 @@ const App: React.FC = () => {
   const [contactLoading, setContactLoading] = useState(false);
   const [contactSubmitted, setContactSubmitted] = useState(false);
 
+  /* --- ADDED SCROLL TO TOP LOGIC --- */
+  const scrollToTop = () => {
+    setSelectedVenture(null); // Clear selected venture if one is open
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setContactLoading(true);
@@ -254,34 +264,34 @@ const App: React.FC = () => {
       projectName: "General Website Inquiry", 
       name: formData.get('name'), 
       phone: formData.get('phone'), 
-      message: "Form submitted via Footer Contact Section on gomatharealtors.in" 
+      message: "Visitor submitted through footer contact form." 
     };
 
     try {
-     
-      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzCZn_MA8gotaIu1Jd52FD7fb8kcgRDO4Ccx1EX9rnaP6EdC-rh5gNlb_qvfNwATZ55/exec'; 
-      
-      await fetch(SCRIPT_URL, { 
+      await fetch(COMPANY_DETAILS.SCRIPT_URL, { 
         method: 'POST', 
         mode: 'no-cors', 
         body: JSON.stringify(data) 
       });
-      
       setContactSubmitted(true);
       (e.target as HTMLFormElement).reset();
       setTimeout(() => setContactSubmitted(false), 4000);
     } catch (error) {
-      alert("Submission failed. Please try again.");
+      alert("Submission failed. Please try again or use WhatsApp.");
     } finally {
       setContactLoading(false);
     }
-};
+  };
 
   return (
     <div className="min-h-screen bg-[#050a18] text-gray-300 selection:bg-gold/30 selection:text-white">
       <nav className="fixed w-full z-50 bg-[#050a18]/80 backdrop-blur-lg border-b border-white/5 h-20 flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex justify-between items-center">
-          <button onClick={() => setSelectedVenture(null)}><Logo /></button>
+          {/* UPDATED LOGO BUTTON */}
+          <button onClick={scrollToTop} className="hover:opacity-80 transition-opacity">
+            <Logo />
+          </button>
+          
           <div className="hidden md:flex items-center space-x-8 text-sm font-semibold">
             <a href="#home" className="text-white hover:text-gold transition">Home</a>
             <a href="#about" className="text-white hover:text-gold transition">About</a>
@@ -294,14 +304,14 @@ const App: React.FC = () => {
       <main>
         <section id="home" className="relative h-screen flex items-center overflow-hidden">
           <div className="absolute inset-0">
-            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover opacity-50" alt="Banner" />
+            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover opacity-50" alt="Gomatha Realtors - Hill View Gated Communities Visakhapatnam" />
             <div className="absolute inset-0 bg-gradient-to-r from-[#050a18] via-[#050a18]/80 to-transparent" />
           </div>
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="max-w-2xl animate-fade-in-up">
               <span className="px-4 py-1.5 gold-gradient text-navy text-[10px] font-black uppercase rounded-full shadow-xl">Established 2017</span>
-              <h1 className="text-6xl md:text-8xl font-display font-bold leading-tight my-6 text-white">Hill View Living <br /><span className="text-gold">With Nature</span></h1>
-              <p className="text-xl text-gray-400 mb-10 max-w-lg leading-relaxed">Premium open plots in Visakhapatnam. Your investment for today, security for tomorrow.</p>
+              <h1 className="text-6xl md:text-8xl font-display font-bold leading-tight my-6 text-white tracking-tight">Project Kubera <br /><span className="text-gold">And More</span></h1>
+              <p className="text-xl text-gray-400 mb-10 max-w-lg leading-relaxed">Premium VUDA & DTCP approved open plots in Visakhapatnam. Your secure land investment for today, safety for tomorrow.</p>
               <button onClick={() => document.getElementById('ventures')?.scrollIntoView({behavior:'smooth'})} className="bg-gold text-navy px-8 py-4 rounded-full font-bold flex items-center gap-2 group hover:scale-105 transition">
                 Explore Ventures <ArrowRight className="group-hover:translate-x-1 transition" />
               </button>
@@ -312,7 +322,7 @@ const App: React.FC = () => {
         <section id="about" className="py-32 bg-[#0a1128] relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-16 items-center">
             <div className="relative">
-              <img src="/Gomatha Logo.png" className="rounded-[40px] shadow-2xl opacity-80" alt="About" />
+              <img src="/Gomatha Logo.png" className="rounded-[40px] shadow-2xl opacity-80" alt="Gomatha Realtors Visakhapatnam Office" />
               <div className="absolute -bottom-6 -right-6 bg-gold p-8 rounded-[32px] text-navy shadow-2xl">
                 <div className="text-4xl font-bold">7+</div><div className="text-[10px] uppercase font-black">Ventures Delivered</div>
               </div>
@@ -320,7 +330,9 @@ const App: React.FC = () => {
             <div>
               <span className="text-gold font-black uppercase tracking-widest text-xs">Trusted Excellence Since 2017</span>
               <h2 className="text-5xl font-display text-white my-6 font-bold">Building Your Legacy with <span className="text-gold">Integrity</span></h2>
-              <p className="text-gray-400 text-lg leading-relaxed mb-8">Gomatha Realtors is a premier real estate development firm in Visakhapatnam. We transform untouched landscapes into high-value gated communities.</p>
+              <p className="text-gray-400 text-lg leading-relaxed mb-8">
+                Gomatha Realtors is a premier real estate development firm specializing in <strong>VUDA and DTCP approved open plots in Visakhapatnam</strong>. Since 2017, we have transformed untouched landscapes into high-value <strong>gated communities</strong> with clear titles, 100% Vasthu compliance, and premium infrastructure.
+              </p>
               <div className="grid grid-cols-2 gap-8">
                 <div><ShieldCheck className="text-gold mb-2" /><h4 className="font-bold text-white text-sm uppercase">Legal Guarantee</h4></div>
                 <div><Trees className="text-gold mb-2" /><h4 className="font-bold text-white text-sm uppercase">Eco-Friendly</h4></div>
@@ -338,7 +350,7 @@ const App: React.FC = () => {
             {VENTURES.map(v => (
               <div key={v.id} onClick={() => setSelectedVenture(v)} className="bg-white/5 rounded-[40px] overflow-hidden border border-white/5 hover:border-gold/50 transition-all cursor-pointer group">
                 <div className="h-80 relative overflow-hidden">
-                  <img src={v.imageUrl} className="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-80" alt={v.name} />
+                  <img src={v.imageUrl} className="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-80" alt={`Gomatha Realtors ${v.name} - Open Plots in Vizag`} />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#050a18] to-transparent opacity-60" />
                 </div>
                 <div className="p-10">
@@ -357,7 +369,7 @@ const App: React.FC = () => {
         <section id="contact" className="py-32 bg-[#0a1128] relative">
           <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-20">
             <div>
-              <h2 className="text-6xl font-display font-bold text-white mb-10">Secure Your <br /><span className="text-gold italic">Future Investment</span></h2>
+              <h2 className="text-6xl font-display font-bold text-white mb-10 tracking-tight">Secure Your <br /><span className="text-gold italic">Future Investment</span></h2>
               <div className="space-y-8">
                 <div className="flex gap-6"><Mail className="text-gold" /> <div><p className="text-xs uppercase font-bold text-gold opacity-60">Email</p><p className="text-white text-lg">{COMPANY_DETAILS.email}</p></div></div>
                 <div className="flex gap-6"><Phone className="text-gold" /> <div><p className="text-xs uppercase font-bold text-gold opacity-60">Call Us</p><p className="text-white text-2xl font-bold">{COMPANY_DETAILS.phone}</p></div></div>
@@ -392,7 +404,10 @@ const App: React.FC = () => {
       </main>
 
       <footer className="py-16 bg-[#050a18] border-t border-white/5 text-center text-gray-500">
-        <Logo /><p className="text-[10px] uppercase font-black tracking-[0.4em] mt-8 opacity-40">© {new Date().getFullYear()} Gomatha Realtors. Licensed DTCP & VUDA Layouts.</p>
+        <button onClick={scrollToTop} className="mb-8">
+          <Logo />
+        </button>
+        <p className="text-[10px] uppercase font-black tracking-[0.4em] opacity-40">© {new Date().getFullYear()} Gomatha Realtors. Licensed DTCP & VUDA Layouts.</p>
       </footer>
 
       {contactSubmitted && (
