@@ -24,6 +24,7 @@ interface Venture {
   layoutUrl: string; 
   gallery: string[];   
   features: string[];
+  videoUrl?: string;
 }
 
 const VENTURES: Venture[] = [
@@ -64,6 +65,7 @@ const VENTURES: Venture[] = [
     sqyds: "per Sq. Yd",
     status: VentureStatus.RUNNING,
     imageUrl: "/Kubera Phase-1/Kubera_Phase-1(main).jpg",
+    videoUrl: "/Kubera Phase-1/kubera-vid.mp4",
     brochureUrl: "/brochures/Kubera Phase-1 Brochure.pdf",
     layoutUrl: "/Kubera Phase-1/Kubera Phase-1 Layout-copy.pdf",
     gallery: ["/Kubera Phase-1/1.jpg", "/Kubera Phase-1/2.jpg", "/Kubera Phase-1/3.jpg", "/Kubera Phase-1/4.jpg", "/Kubera Phase-1/5.jpg", "/Kubera Phase-1/6.jpg", "/Kubera Phase-1/7.jpg", "/Kubera Phase-1/8.jpg", "/Kubera Phase-1/9.jpg", "/Kubera Phase-1/10.jpg","/Kubera Phase-1/11.jpg","/Kubera Phase-1/12.jpg"],
@@ -226,6 +228,27 @@ const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () =
           </div>
         </div>
 
+        {/* Video Walkthrough Section - Fixed for Web Performance */}
+        {venture.videoUrl && (
+          <div className="mt-24">
+            <h2 className="text-4xl text-white font-display font-bold mb-10">Project Walkthrough</h2>
+            <div className="aspect-video w-full rounded-[40px] overflow-hidden border border-white/10 shadow-2xl bg-black">
+              <video 
+                controls 
+                autoPlay 
+                muted 
+                loop 
+                playsInline
+                preload="metadata"
+                className="w-full h-full object-cover"
+              >
+                <source src={venture.videoUrl} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        )}
+
         <div className="mt-24">
           <h2 className="text-4xl text-white font-display font-bold mb-10">Site Gallery</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -247,9 +270,8 @@ const App: React.FC = () => {
   const [contactLoading, setContactLoading] = useState(false);
   const [contactSubmitted, setContactSubmitted] = useState(false);
 
-  /* --- ADDED SCROLL TO TOP LOGIC --- */
   const scrollToTop = () => {
-    setSelectedVenture(null); // Clear selected venture if one is open
+    setSelectedVenture(null);
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
@@ -287,7 +309,6 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-[#050a18] text-gray-300 selection:bg-gold/30 selection:text-white">
       <nav className="fixed w-full z-50 bg-[#050a18]/80 backdrop-blur-lg border-b border-white/5 h-20 flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex justify-between items-center">
-          {/* UPDATED LOGO BUTTON */}
           <button onClick={scrollToTop} className="hover:opacity-80 transition-opacity">
             <Logo />
           </button>
