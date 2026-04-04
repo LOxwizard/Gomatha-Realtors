@@ -37,6 +37,7 @@ const VENTURES: Venture[] = [
     sqyds: "per Sq. Yd",
     status: VentureStatus.RUNNING,
     imageUrl: "/Bitra-Colony/Bitra-Colony.jpg",
+    videoUrl: "/Bitra-Colony/Bitra-Colony.mp4",
     brochureUrl: "/brochures/Bitra-Colony Brochure.pdf", 
     layoutUrl: "/Bitra-Colony/Bitra_Colony_Layout-copy.pdf",
     gallery: ["/Bitra-Colony/1.jpg", "/Bitra-Colony/2.jpg", "/Bitra-Colony/3.jpg", "/Bitra-Colony/4.jpg", "/Bitra-Colony/5.jpg", "/Bitra-Colony/6.jpg", "/Bitra-Colony/7.jpg", "/Bitra-Colony/8.jpg", "/Bitra-Colony/9.jpg", "/Bitra-Colony/10.jpg", "/Bitra-Colony/11.jpg"],
@@ -92,6 +93,8 @@ const COMPANY_DETAILS = {
   whatsapp: "919700477222",
   email: "gomatharealtors@gmail.com",
   address: "NAD Junction, Visakhapatnam",
+  facebook: "https://www.facebook.com/share/1HwruVzmrU/",
+  instagram: "https://instagram.com/gomathrealtors_official_",
   SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxE1OzO9XbH2Qrf6PKmHRFDI7woJVH_7M2OohSuL654WpBrNVV5HnRD_xnj19T_7hJV/exec'
 };
 
@@ -228,7 +231,6 @@ const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () =
           </div>
         </div>
 
-        {/* Video Walkthrough Section - Fixed for Web Performance */}
         {venture.videoUrl && (
           <div className="mt-24">
             <h2 className="text-4xl text-white font-display font-bold mb-10">Project Walkthrough</h2>
@@ -270,12 +272,43 @@ const App: React.FC = () => {
   const [contactLoading, setContactLoading] = useState(false);
   const [contactSubmitted, setContactSubmitted] = useState(false);
 
-  const scrollToTop = () => {
+  /* --- LOGIC TO HANDLE REFRESH --- */
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash.startsWith('#venture-')) {
+        const id = parseInt(hash.replace('#venture-', ''));
+        const venture = VENTURES.find(v => v.id === id);
+        if (venture) {
+          setSelectedVenture(venture);
+        }
+      } else {
+        setSelectedVenture(null);
+      }
+    };
+
+    // Run on initial load
+    handleHashChange();
+
+    // Listen for manual hash changes
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const openVenture = (v: Venture) => {
+    window.location.hash = `venture-${v.id}`;
+    setSelectedVenture(v);
+  };
+
+  const closeVenture = () => {
+    window.location.hash = '';
     setSelectedVenture(null);
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+    window.scrollTo(0, 0);
+  };
+
+  const scrollToTop = () => {
+    closeVenture();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -369,7 +402,7 @@ const App: React.FC = () => {
           </div>
           <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-10">
             {VENTURES.map(v => (
-              <div key={v.id} onClick={() => setSelectedVenture(v)} className="bg-white/5 rounded-[40px] overflow-hidden border border-white/5 hover:border-gold/50 transition-all cursor-pointer group">
+              <div key={v.id} onClick={() => openVenture(v)} className="bg-white/5 rounded-[40px] overflow-hidden border border-white/5 hover:border-gold/50 transition-all cursor-pointer group">
                 <div className="h-80 relative overflow-hidden">
                   <img src={v.imageUrl} className="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-80" alt={`Gomatha Realtors ${v.name} - Open Plots in Vizag`} />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#050a18] to-transparent opacity-60" />
@@ -394,6 +427,18 @@ const App: React.FC = () => {
               <div className="space-y-8">
                 <div className="flex gap-6"><Mail className="text-gold" /> <div><p className="text-xs uppercase font-bold text-gold opacity-60">Email</p><p className="text-white text-lg">{COMPANY_DETAILS.email}</p></div></div>
                 <div className="flex gap-6"><Phone className="text-gold" /> <div><p className="text-xs uppercase font-bold text-gold opacity-60">Call Us</p><p className="text-white text-2xl font-bold">{COMPANY_DETAILS.phone}</p></div></div>
+                
+                <div className="pt-6">
+                  <p className="text-xs uppercase font-bold text-gold opacity-60 mb-4">Follow Us</p>
+                  <div className="flex gap-4">
+                    <a href={COMPANY_DETAILS.facebook} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-blue-600 hover:border-blue-600 transition-all duration-300 group">
+                      <Facebook size={20} />
+                    </a>
+                    <a href={COMPANY_DETAILS.instagram} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-pink-500 hover:to-purple-600 hover:border-transparent transition-all duration-300 group">
+                      <Instagram size={20} />
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="bg-[#050a18] border border-white/10 rounded-[48px] p-12 shadow-2xl text-center">
@@ -443,7 +488,7 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {selectedVenture && <ProjectDetailView venture={selectedVenture} onBack={() => setSelectedVenture(null)} />}
+      {selectedVenture && <ProjectDetailView venture={selectedVenture} onBack={closeVenture} />}
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
