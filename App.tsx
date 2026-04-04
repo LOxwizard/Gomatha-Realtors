@@ -69,7 +69,7 @@ const VENTURES: Venture[] = [
     videoUrl: "/Kubera Phase-1/kubera-vid.mp4",
     brochureUrl: "/brochures/Kubera Phase-1 Brochure.pdf",
     layoutUrl: "/Kubera Phase-1/Kubera Phase-1 Layout-copy.pdf",
-    gallery: ["/Kubera Phase-1/1.jpg", "/Kubera Phase-1/2.jpg", "/Kubera Phase-1/3.jpg", "/Kubera Phase-1/4.jpg", "/Kubera Phase-1/5.jpg", "/Kubera Phase-1/6.jpg", "/Kubera Phase-1/7.jpg", "/Kubera Phase-1/8.jpg", "/Kubera Phase-1/9.jpg", "/Kubera Phase-1/10.jpg","/Kubera Phase-1/11.jpg","/Kubera Phase-1/12.jpg"],
+    gallery: ["/Kubera Phase-1/1.jpg", "/Kubera Phase-1/2.jpg", "/Kubera Phase-1/3.jpg", "/Kubera Phase-1/4.jpg", "/Kubera Phase-1/5.jpg", "/Kubera Phase-1/6.jpg", "/Kubera Phase-1/7.jpg", "/Kubera Phase-1/9.jpg", "/Kubera Phase-1/10.jpg","/Kubera Phase-1/11.jpg","/Kubera Phase-1/12.jpg"],
     features: ["Near Pendurthi Junction", "Black Top Roads", "Street Lights"]
   },
   {
