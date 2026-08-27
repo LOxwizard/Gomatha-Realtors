@@ -78,6 +78,24 @@ export const VENTURES: Venture[] = [
     price: 'Contact for Price'
   }
 ];
+{
+  id: 'akshaya-nidhi',
+  name: 'Akshaya Nidhi',
+  location: 'Kothavalasa, Visakhapatnam',
+  description: 'Premium residential open plots in Kothavalasa with excellent connectivity and essential infrastructure.',
+  status: VentureStatus.RUNNING,
+  features: [
+    'Well Developed Roads',
+    'Electricity Facility',
+    'Drainage Facility',
+    'Avenue Plantation',
+    'Clear Title',
+    '100% Vasthu',
+  ],
+  imageUrl: '/Akshaya-Nidhi.jpg',
+  price: '₹8,500 per Sq. Yd',
+}
+];
 
 export const COMPANY_DETAILS = {
   name: 'Gomatha Realtors',
