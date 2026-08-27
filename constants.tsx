@@ -76,8 +76,8 @@ export const VENTURES: Venture[] = [
     ],
     imageUrl: '/siri-lake-view.jpg',
     price: 'Contact for Price'
-  }
-];
+  };
+
 {
   id: 'akshaya-nidhi',
   name: 'Akshaya Nidhi',
