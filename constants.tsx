@@ -95,7 +95,7 @@ export const VENTURES: Venture[] = [
   imageUrl: '/Akshaya-Nidhi.jpg',
   price: '₹8,500 per Sq. Yd',
 };
-];
+
 
 export const COMPANY_DETAILS = {
   name: 'Gomatha Realtors',
