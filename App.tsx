@@ -107,7 +107,7 @@ const VENTURES: Venture[] = [
     imageUrl: "/Akshaya-Nidhi/Akshaya-Nidhi.jpg",
     brochureUrl: "/brochures/Akshaya-Nidhi Brochure.pdf",
     layoutUrl: "/Akshaya-Nidhi/Akshaya-Nidhi Layout-copy.pdf",
-    gallery: ["/Akshaya-Nidhi/1.jpg", "/Akshaya-Nidhi/2.jpg", "/Akshaya-Nidhi/3.jpg", "/Akshaya-Nidhi/4.jpg", "/Akshaya-Nidhi/5.jpg", "/Akshaya-Nidhi/6.jpg"],
+    gallery: ["/Akshaya-Nidhi/1.jpg", "/Akshaya-Nidhi/2.jpg", "/Akshaya-Nidhi/3.jpg", "/Akshaya-Nidhi/4.jpg"],
     features: ["Black Top Roads", "Drainage System", "Electricity", "Compound Wall", "Plantation"]
   }
 ];
