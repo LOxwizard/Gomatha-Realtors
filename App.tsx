@@ -93,6 +93,23 @@ const VENTURES: Venture[] = [
     gallery: ["/Siri-Lake-View-Gardens/1.jpg", "/Siri-Lake-View-Gardens/2.jpg", "/Siri-Lake-View-Gardens/3.jpg", "/Siri-Lake-View-Gardens/4.jpg", "/Siri-Lake-View-Gardens/5.jpg", "/Siri-Lake-View-Gardens/6.jpg", "/Siri-Lake-View-Gardens/7.jpg", "/Siri-Lake-View-Gardens/8.jpg", "/Siri-Lake-View-Gardens/9.jpg", "/Siri-Lake-View-Gardens/10.jpg"],
     features: ["25 Feet Wide Roads", "Clear Title", "Ready for Construction"]
   }
+
+    ,
+  {
+    id: 5,
+    slug: "akshaya-nidhi",
+    name: "Akshaya Nidhi",
+    location: "Ardhannapalem, Kothavalasa, Visakhapatnam",
+    description: "A well-planned open plot venture at Kothavalasa featuring complete road, drainage and electricity infrastructure, a secure compound wall, and green plantation along the layout.",
+    price: "8,500",
+    sqyds: "per Sq. Yd",
+    status: VentureStatus.RUNNING,
+    imageUrl: "/Akshaya-Nidhi/Akshaya-Nidhi.jpg",
+    brochureUrl: "/brochures/Akshaya-Nidhi Brochure.pdf",
+    layoutUrl: "/Akshaya-Nidhi/Akshaya-Nidhi Layout-copy.pdf",
+    gallery: ["/Akshaya-Nidhi/1.jpg", "/Akshaya-Nidhi/2.jpg", "/Akshaya-Nidhi/3.jpg", "/Akshaya-Nidhi/4.jpg", "/Akshaya-Nidhi/5.jpg", "/Akshaya-Nidhi/6.jpg"],
+    features: ["Black Top Roads", "Drainage System", "Electricity", "Compound Wall", "Plantation"]
+  }
 ];
 
 const COMPANY_DETAILS = {
