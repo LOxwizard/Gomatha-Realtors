@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Routes, Route, Link, useNavigate, useParams } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import {
   Building2, MapPin, Phone, Mail, CheckCircle2, Trees,
   ShieldCheck, Zap, ArrowRight, Menu, X, Facebook,
@@ -518,10 +518,26 @@ const HomePage = () => {
 // ---- Shared layout: nav + footer wrap every route ----
 const App: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const goHomeAndScrollTop = () => {
     navigate('/');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Scrolls to a section on the home page. If we're on a different route
+  // (e.g. a venture detail page), it navigates home first, then scrolls
+  // once the home page has mounted.
+  const scrollToSection = (sectionId: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -533,10 +549,10 @@ const App: React.FC = () => {
           </button>
 
           <div className="hidden md:flex items-center space-x-8 text-sm font-semibold">
-            <Link to="/#home" className="text-white hover:text-gold transition">Home</Link>
-            <Link to="/#about" className="text-white hover:text-gold transition">About</Link>
-            <Link to="/#ventures" className="text-white hover:text-gold transition">Ventures</Link>
-            <Link to="/#contact" className="bg-gold text-navy px-6 py-2.5 rounded-full font-bold hover:brightness-110 transition">Contact</Link>
+            <a href="#home" onClick={scrollToSection('home')} className="text-white hover:text-gold transition cursor-pointer">Home</a>
+            <a href="#about" onClick={scrollToSection('about')} className="text-white hover:text-gold transition cursor-pointer">About</a>
+            <a href="#ventures" onClick={scrollToSection('ventures')} className="text-white hover:text-gold transition cursor-pointer">Ventures</a>
+            <a href="#contact" onClick={scrollToSection('contact')} className="bg-gold text-navy px-6 py-2.5 rounded-full font-bold hover:brightness-110 transition cursor-pointer">Contact</a>
           </div>
         </div>
       </nav>
