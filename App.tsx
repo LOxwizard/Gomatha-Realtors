@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Building2, MapPin, Phone, Mail, CheckCircle2, Trees, 
-  ShieldCheck, Zap, ArrowRight, Menu, X, Facebook, 
+import React, { useState } from 'react';
+import { Routes, Route, Link, useNavigate, useParams } from 'react-router-dom';
+import {
+  Building2, MapPin, Phone, Mail, CheckCircle2, Trees,
+  ShieldCheck, Zap, ArrowRight, Menu, X, Facebook,
   Instagram, Linkedin, ArrowLeft, Loader2, MessageCircle,
   Download, Image as ImageIcon, FileText, Award, Users, Target
 } from 'lucide-react';
+import SEO from './components/SEO';
 
 enum VentureStatus {
   RUNNING = "RUNNING",
@@ -13,6 +15,7 @@ enum VentureStatus {
 
 interface Venture {
   id: number;
+  slug: string;           // used in the URL: /ventures/:slug
   name: string;
   location: string;
   description: string;
@@ -20,9 +23,9 @@ interface Venture {
   sqyds: string;
   status: VentureStatus;
   imageUrl: string;
-  brochureUrl: string; 
-  layoutUrl: string; 
-  gallery: string[];   
+  brochureUrl: string;
+  layoutUrl: string;
+  gallery: string[];
   features: string[];
   videoUrl?: string;
 }
@@ -30,6 +33,7 @@ interface Venture {
 const VENTURES: Venture[] = [
   {
     id: 1,
+    slug: "bitra-colony",
     name: "Bitra Colony",
     location: "Venkannapalem, Chodavaram, Visakhapatnam",
     description: "An elite gated community offering a 360° hill view and premium VUDA approved infrastructure for a peaceful lifestyle in Visakhapatnam.",
@@ -38,13 +42,14 @@ const VENTURES: Venture[] = [
     status: VentureStatus.RUNNING,
     imageUrl: "/Bitra-Colony/Bitra-Colony.jpg",
     videoUrl: "/Bitra-Colony/Bitra-Colony.mp4",
-    brochureUrl: "/brochures/Bitra-Colony Brochure.pdf", 
+    brochureUrl: "/brochures/Bitra-Colony Brochure.pdf",
     layoutUrl: "/Bitra-Colony/Bitra_Colony_Layout-copy.pdf",
     gallery: ["/Bitra-Colony/1.jpg", "/Bitra-Colony/2.jpg", "/Bitra-Colony/3.jpg", "/Bitra-Colony/4.jpg", "/Bitra-Colony/5.jpg", "/Bitra-Colony/6.jpg", "/Bitra-Colony/7.jpg", "/Bitra-Colony/8.jpg", "/Bitra-Colony/9.jpg", "/Bitra-Colony/10.jpg", "/Bitra-Colony/11.jpg"],
     features: ["40 & 33 Feet BT Roads", "Gated Community", "360° Hill View", "Drainage System", "Electricity"]
   },
   {
     id: 2,
+    slug: "siri-chandana-gardens",
     name: "Siri Chandana Gardens",
     location: "Singamdorapalem, K.Kotapadu, Visakhapatnam",
     description: "A sustainable real estate investment featuring White Sandalwood and Mahogany plantations with high returns in the heart of Vizag.",
@@ -59,6 +64,7 @@ const VENTURES: Venture[] = [
   },
   {
     id: 3,
+    slug: "kubera-phase-1",
     name: "Kubera Phase-1",
     location: "Chintalapalem, Pendurthi, Visakhapatnam",
     description: "Strategically located DTCP approved plots near Pendurthi Junction, offering excellent connectivity and growth potential for Vizag investors.",
@@ -69,11 +75,12 @@ const VENTURES: Venture[] = [
     videoUrl: "/Kubera Phase-1/kubera-vid.mp4",
     brochureUrl: "/brochures/Kubera Phase-1 Brochure.pdf",
     layoutUrl: "/Kubera Phase-1/Kubera Phase-1 Layout-copy.pdf",
-    gallery: ["/Kubera Phase-1/1.jpg", "/Kubera Phase-1/2.jpg", "/Kubera Phase-1/3.jpg", "/Kubera Phase-1/4.jpg", "/Kubera Phase-1/5.jpg", "/Kubera Phase-1/6.jpg", "/Kubera Phase-1/7.jpg", "/Kubera Phase-1/9.jpg", "/Kubera Phase-1/10.jpg","/Kubera Phase-1/11.jpg","/Kubera Phase-1/12.jpg"],
+    gallery: ["/Kubera Phase-1/1.jpg", "/Kubera Phase-1/2.jpg", "/Kubera Phase-1/3.jpg", "/Kubera Phase-1/4.jpg", "/Kubera Phase-1/5.jpg", "/Kubera Phase-1/6.jpg", "/Kubera Phase-1/7.jpg", "/Kubera Phase-1/9.jpg", "/Kubera Phase-1/10.jpg", "/Kubera Phase-1/11.jpg", "/Kubera Phase-1/12.jpg"],
     features: ["Near Pendurthi Junction", "Black Top Roads", "Street Lights"]
   },
   {
     id: 4,
+    slug: "siri-lake-view-gardens",
     name: "Siri Lake View Gardens",
     location: "K.Kotapadu, Visakhapatnam",
     description: "A serene residential gated community project offering a peaceful lake view and modern amenities near Visakhapatnam city.",
@@ -105,9 +112,11 @@ const openWhatsApp = (msg: string) => {
 const Logo = () => (
   <div className="flex items-center gap-3 group">
     <div className="relative h-12 w-12 overflow-hidden rounded-xl bg-white/5 p-1 border border-white/10 group-hover:border-gold/50 transition-all duration-300">
-      <img 
-        src="/Gomatha-Logo.png" 
-        alt="Gomatha Realtors Logo" 
+      <img
+        src="/Gomatha-Logo.png"
+        alt="Gomatha Realtors Logo"
+        width={48}
+        height={48}
         className="h-full w-full object-contain brightness-110"
       />
     </div>
@@ -126,11 +135,11 @@ const EnquiryModal = ({ projectName, onClose }: { projectName: string, onClose: 
     e.preventDefault();
     setLoading(true);
     const formData = new FormData(e.currentTarget);
-    const data = { 
-      projectName, 
-      name: formData.get('name'), 
-      phone: formData.get('phone'), 
-      message: formData.get('message') 
+    const data = {
+      projectName,
+      name: formData.get('name'),
+      phone: formData.get('phone'),
+      message: formData.get('message')
     };
 
     try {
@@ -158,8 +167,8 @@ const EnquiryModal = ({ projectName, onClose }: { projectName: string, onClose: 
               <h3 className="text-2xl font-bold text-white">Inquiry: {projectName}</h3>
               <button onClick={onClose} className="text-white/50 hover:text-white"><X size={24} /></button>
             </div>
-            
-            <button 
+
+            <button
               onClick={() => openWhatsApp(`Hi Gomatha Realtors, I am interested in your project: ${projectName}. Please share more details.`)}
               className="w-full mb-6 py-4 bg-[#25D366] text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:brightness-105 transition shadow-lg"
             >
@@ -186,21 +195,70 @@ const EnquiryModal = ({ projectName, onClose }: { projectName: string, onClose: 
   );
 };
 
-const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () => void }) => {
+// ---- Venture detail page: now a real route at /ventures/:slug ----
+const ProjectDetailPage = () => {
+  const { slug } = useParams();
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
-  useEffect(() => { window.scrollTo(0, 0); }, []);
+  const venture = VENTURES.find(v => v.slug === slug);
+
+  React.useEffect(() => { window.scrollTo(0, 0); }, [slug]);
+
+  if (!venture) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#050a18] text-white gap-6">
+        <SEO
+          title="Project Not Found | Gomatha Realtors"
+          description="The project you're looking for could not be found. Explore our current ventures in Visakhapatnam."
+          path={`/ventures/${slug ?? ''}`}
+        />
+        <h1 className="text-3xl font-bold">Project Not Found</h1>
+        <Link to="/" className="text-gold underline">Back to Home</Link>
+      </div>
+    );
+  }
+
+  const pageTitle = `${venture.name} | Plots in ${venture.location.split(',')[0]}, Visakhapatnam`;
+  const pageDescription = `${venture.description} Priced at Rs.${venture.price} ${venture.sqyds}. Located at ${venture.location}. Enquire now with Gomatha Realtors.`;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateListing",
+    "name": venture.name,
+    "description": venture.description,
+    "url": `https://gomatharealtors.in/ventures/${venture.slug}`,
+    "image": `https://gomatharealtors.in${venture.imageUrl}`,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": venture.location,
+      "addressRegion": "AP",
+      "addressCountry": "IN"
+    },
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "INR",
+      "price": venture.price.replace(/,/g, ''),
+      "availability": "https://schema.org/InStock"
+    }
+  };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-[#050a18] overflow-y-auto animate-fade-in">
+    <div className="min-h-screen bg-[#050a18] animate-fade-in">
+      <SEO title={pageTitle} description={pageDescription} path={`/ventures/${venture.slug}`} image={venture.imageUrl} jsonLd={jsonLd} />
+
       <div className="absolute inset-0 z-0 h-[60vh]">
-        <img src={venture.imageUrl} className="w-full h-full object-cover opacity-40" alt={`${venture.name} - Premium Plots in Visakhapatnam`} />
+        <img
+          src={venture.imageUrl}
+          className="w-full h-full object-cover opacity-40"
+          alt={`${venture.name} - Premium Plots in Visakhapatnam`}
+          fetchPriority="high"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-[#050a18] via-[#050a18]/40 to-transparent"></div>
       </div>
 
       <div className="relative z-10 p-6 md:p-10 max-w-7xl mx-auto w-full">
-        <button onClick={onBack} className="text-gold font-bold uppercase tracking-widest text-xs flex items-center gap-2 mb-12 bg-white/5 backdrop-blur-md px-6 py-3 rounded-full border border-white/10 hover:bg-gold hover:text-navy transition">
+        <Link to="/" className="text-gold font-bold uppercase tracking-widest text-xs flex items-center gap-2 mb-12 bg-white/5 backdrop-blur-md px-6 py-3 rounded-full border border-white/10 hover:bg-gold hover:text-navy transition w-fit">
           <ArrowLeft size={16} /> Back to Ventures
-        </button>
+        </Link>
 
         <div className="grid lg:grid-cols-12 gap-12 items-start">
           <div className="lg:col-span-7">
@@ -215,7 +273,7 @@ const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () =
 
           <div className="lg:col-span-5 space-y-6">
             <div className="bg-white/5 backdrop-blur-xl rounded-[40px] p-8 border border-white/10 shadow-2xl">
-              <h3 className="text-2xl font-display text-white mb-6 border-b border-white/10 pb-4">Highlights</h3>
+              <h2 className="text-2xl font-display text-white mb-6 border-b border-white/10 pb-4">Highlights</h2>
               <div className="grid gap-4">
                 {venture.features.map((f, i) => (
                   <div key={i} className="flex items-center gap-4 text-gray-300"><CheckCircle2 size={16} className="text-gold" /> <span className="text-sm">{f}</span></div>
@@ -235,13 +293,13 @@ const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () =
           <div className="mt-24">
             <h2 className="text-4xl text-white font-display font-bold mb-10">Project Walkthrough</h2>
             <div className="aspect-video w-full rounded-[40px] overflow-hidden border border-white/10 shadow-2xl bg-black">
-              <video 
-                controls 
-                autoPlay 
-                muted 
-                loop 
+              <video
+                controls
+                muted
+                loop
                 playsInline
-                preload="metadata"
+                preload="none"
+                poster={venture.imageUrl}
                 className="w-full h-full object-cover"
               >
                 <source src={venture.videoUrl} type="video/mp4" />
@@ -256,7 +314,13 @@ const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () =
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {venture.gallery.map((img, i) => (
               <div key={i} className="aspect-video rounded-[32px] overflow-hidden border border-white/10 group">
-                <img src={img} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt={`Gomatha Realtors ${venture.name} site view ${i + 1}`} />
+                <img
+                  src={img}
+                  className="w-full h-full object-cover transition duration-700 group-hover:scale-110"
+                  alt={`${venture.name} site view ${i + 1} - ${venture.location}`}
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
             ))}
           </div>
@@ -267,66 +331,27 @@ const ProjectDetailView = ({ venture, onBack }: { venture: Venture, onBack: () =
   );
 };
 
-const App: React.FC = () => {
-  const [selectedVenture, setSelectedVenture] = useState<Venture | null>(null);
+// ---- Home page: everything that used to live directly in App ----
+const HomePage = () => {
   const [contactLoading, setContactLoading] = useState(false);
   const [contactSubmitted, setContactSubmitted] = useState(false);
-
-  /* --- LOGIC TO HANDLE REFRESH --- */
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash.startsWith('#venture-')) {
-        const id = parseInt(hash.replace('#venture-', ''));
-        const venture = VENTURES.find(v => v.id === id);
-        if (venture) {
-          setSelectedVenture(venture);
-        }
-      } else {
-        setSelectedVenture(null);
-      }
-    };
-
-    // Run on initial load
-    handleHashChange();
-
-    // Listen for manual hash changes
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
-
-  const openVenture = (v: Venture) => {
-    window.location.hash = `venture-${v.id}`;
-    setSelectedVenture(v);
-  };
-
-  const closeVenture = () => {
-    window.location.hash = '';
-    setSelectedVenture(null);
-    window.scrollTo(0, 0);
-  };
-
-  const scrollToTop = () => {
-    closeVenture();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setContactLoading(true);
     const formData = new FormData(e.currentTarget);
-    const data = { 
-      projectName: "General Website Inquiry", 
-      name: formData.get('name'), 
-      phone: formData.get('phone'), 
-      message: "Visitor submitted through footer contact form." 
+    const data = {
+      projectName: "General Website Inquiry",
+      name: formData.get('name'),
+      phone: formData.get('phone'),
+      message: "Visitor submitted through footer contact form."
     };
 
     try {
-      await fetch(COMPANY_DETAILS.SCRIPT_URL, { 
-        method: 'POST', 
-        mode: 'no-cors', 
-        body: JSON.stringify(data) 
+      await fetch(COMPANY_DETAILS.SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify(data)
       });
       setContactSubmitted(true);
       (e.target as HTMLFormElement).reset();
@@ -339,44 +364,44 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#050a18] text-gray-300 selection:bg-gold/30 selection:text-white">
-      <nav className="fixed w-full z-50 bg-[#050a18]/80 backdrop-blur-lg border-b border-white/5 h-20 flex items-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex justify-between items-center">
-          <button onClick={scrollToTop} className="hover:opacity-80 transition-opacity">
-            <Logo />
-          </button>
-          
-          <div className="hidden md:flex items-center space-x-8 text-sm font-semibold">
-            <a href="#home" className="text-white hover:text-gold transition">Home</a>
-            <a href="#about" className="text-white hover:text-gold transition">About</a>
-            <a href="#ventures" className="text-white hover:text-gold transition">Ventures</a>
-            <a href="#contact" className="bg-gold text-navy px-6 py-2.5 rounded-full font-bold hover:brightness-110 transition">Contact</a>
-          </div>
-        </div>
-      </nav>
+    <>
+      <SEO
+        title="Gomatha Realtors | Premium VUDA & DTCP Plots in Visakhapatnam"
+        description="Invest in luxury gated community plots and open lands in Vizag. Explore Bitra Colony, Siri Chandana Gardens, Kubera Phase-1 & Siri Lake View Gardens. 100% Vasthu & clear titles."
+        path="/"
+      />
 
       <main>
         <section id="home" className="relative h-screen flex items-center overflow-hidden">
           <div className="absolute inset-0">
-            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover opacity-50" alt="Gomatha Realtors - Hill View Gated Communities Visakhapatnam" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#050a18] via-[#050a18]/80 to-transparent" />
+            <img
+              src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2000"
+              className="w-full h-full object-cover opacity-50"
+              alt="Gomatha Realtors - Hill View Gated Communities Visakhapatnam"
+              fetchPriority="high"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050a18] via-[#050a18]/60 to-[#050a18]/30" />
           </div>
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="max-w-2xl animate-fade-in-up">
-              <span className="px-4 py-1.5 gold-gradient text-navy text-[10px] font-black uppercase rounded-full shadow-xl">Established 2017</span>
-              <h1 className="text-6xl md:text-8xl font-display font-bold leading-tight my-6 text-white tracking-tight">Project Kubera <br /><span className="text-gold">And More</span></h1>
-              <p className="text-xl text-gray-400 mb-10 max-w-lg leading-relaxed">Premium VUDA & DTCP approved open plots in Visakhapatnam. Your secure land investment for today, safety for tomorrow.</p>
-              <button onClick={() => document.getElementById('ventures')?.scrollIntoView({behavior:'smooth'})} className="bg-gold text-navy px-8 py-4 rounded-full font-bold flex items-center gap-2 group hover:scale-105 transition">
-                Explore Ventures <ArrowRight className="group-hover:translate-x-1 transition" />
-              </button>
-            </div>
+            <span className="text-gold font-black uppercase tracking-widest text-xs">Since 2017 · Visakhapatnam</span>
+            <h1 className="text-6xl md:text-8xl font-display font-bold leading-tight my-6 text-white tracking-tight">Project Kubera <br /><span className="text-gold">And More</span></h1>
+            <p className="text-gray-300 text-lg max-w-xl mb-10">VUDA & DTCP approved open plots and gated communities across Visakhapatnam, built on clear titles and Vasthu-compliant layouts.</p>
+            <a href="#ventures" className="inline-flex items-center gap-3 px-10 py-5 gold-gradient text-navy font-bold rounded-2xl shadow-2xl hover:brightness-110 transition">
+              Explore Ventures <ArrowRight size={20} />
+            </a>
           </div>
         </section>
 
-        <section id="about" className="py-32 bg-[#0a1128] relative overflow-hidden">
+        <section id="about" className="py-32 bg-[#0a1128]">
           <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-16 items-center">
             <div className="relative">
-              <img src="/Gomatha Logo.png" className="rounded-[40px] shadow-2xl opacity-80" alt="Gomatha Realtors Visakhapatnam Office" />
+              <img
+                src="/Gomatha-Logo.png"
+                className="rounded-[40px] shadow-2xl opacity-80"
+                alt="Gomatha Realtors Visakhapatnam Office"
+                loading="lazy"
+                decoding="async"
+              />
               <div className="absolute -bottom-6 -right-6 bg-gold p-8 rounded-[32px] text-navy shadow-2xl">
                 <div className="text-4xl font-bold">7+</div><div className="text-[10px] uppercase font-black">Ventures Delivered</div>
               </div>
@@ -388,8 +413,8 @@ const App: React.FC = () => {
                 Gomatha Realtors is a premier real estate development firm specializing in <strong>VUDA and DTCP approved open plots in Visakhapatnam</strong>. Since 2017, we have transformed untouched landscapes into high-value <strong>gated communities</strong> with clear titles, 100% Vasthu compliance, and premium infrastructure.
               </p>
               <div className="grid grid-cols-2 gap-8">
-                <div><ShieldCheck className="text-gold mb-2" /><h4 className="font-bold text-white text-sm uppercase">Legal Guarantee</h4></div>
-                <div><Trees className="text-gold mb-2" /><h4 className="font-bold text-white text-sm uppercase">Eco-Friendly</h4></div>
+                <div><ShieldCheck className="text-gold mb-2" /><h3 className="font-bold text-white text-sm uppercase">Legal Guarantee</h3></div>
+                <div><Trees className="text-gold mb-2" /><h3 className="font-bold text-white text-sm uppercase">Eco-Friendly</h3></div>
               </div>
             </div>
           </div>
@@ -402,9 +427,15 @@ const App: React.FC = () => {
           </div>
           <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-10">
             {VENTURES.map(v => (
-              <div key={v.id} onClick={() => openVenture(v)} className="bg-white/5 rounded-[40px] overflow-hidden border border-white/5 hover:border-gold/50 transition-all cursor-pointer group">
+              <Link to={`/ventures/${v.slug}`} key={v.id} className="bg-white/5 rounded-[40px] overflow-hidden border border-white/5 hover:border-gold/50 transition-all cursor-pointer group block">
                 <div className="h-80 relative overflow-hidden">
-                  <img src={v.imageUrl} className="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-80" alt={`Gomatha Realtors ${v.name} - Open Plots in Vizag`} />
+                  <img
+                    src={v.imageUrl}
+                    className="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-80"
+                    alt={`${v.name} - Open Plots in ${v.location}`}
+                    loading="lazy"
+                    decoding="async"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#050a18] to-transparent opacity-60" />
                 </div>
                 <div className="p-10">
@@ -415,7 +446,7 @@ const App: React.FC = () => {
                     <div className="w-12 h-12 bg-white/5 text-gold rounded-full flex items-center justify-center group-hover:bg-gold group-hover:text-navy transition"><ArrowRight size={20}/></div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </section>
@@ -427,7 +458,7 @@ const App: React.FC = () => {
               <div className="space-y-8">
                 <div className="flex gap-6"><Mail className="text-gold" /> <div><p className="text-xs uppercase font-bold text-gold opacity-60">Email</p><p className="text-white text-lg">{COMPANY_DETAILS.email}</p></div></div>
                 <div className="flex gap-6"><Phone className="text-gold" /> <div><p className="text-xs uppercase font-bold text-gold opacity-60">Call Us</p><p className="text-white text-2xl font-bold">{COMPANY_DETAILS.phone}</p></div></div>
-                
+
                 <div className="pt-6">
                   <p className="text-xs uppercase font-bold text-gold opacity-60 mb-4">Follow Us</p>
                   <div className="flex gap-4">
@@ -443,8 +474,8 @@ const App: React.FC = () => {
             </div>
             <div className="bg-[#050a18] border border-white/10 rounded-[48px] p-12 shadow-2xl text-center">
               <h3 className="text-2xl font-bold text-white mb-8">Get in Touch</h3>
-              
-              <button 
+
+              <button
                 type="button"
                 onClick={() => openWhatsApp("Hi Gomatha Realtors, I'd like to inquire about your current properties.")}
                 className="w-full mb-8 py-4 bg-[#25D366] text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:brightness-105 transition shadow-lg"
@@ -469,13 +500,6 @@ const App: React.FC = () => {
         </section>
       </main>
 
-      <footer className="py-16 bg-[#050a18] border-t border-white/5 text-center text-gray-500">
-        <button onClick={scrollToTop} className="mb-8">
-          <Logo />
-        </button>
-        <p className="text-[10px] uppercase font-black tracking-[0.4em] opacity-40">© {new Date().getFullYear()} Gomatha Realtors. Licensed DTCP & VUDA Layouts.</p>
-      </footer>
-
       {contactSubmitted && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 animate-fade-in">
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setContactSubmitted(false)} />
@@ -487,8 +511,47 @@ const App: React.FC = () => {
           </div>
         </div>
       )}
+    </>
+  );
+};
 
-      {selectedVenture && <ProjectDetailView venture={selectedVenture} onBack={closeVenture} />}
+// ---- Shared layout: nav + footer wrap every route ----
+const App: React.FC = () => {
+  const navigate = useNavigate();
+
+  const goHomeAndScrollTop = () => {
+    navigate('/');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <div className="min-h-screen bg-[#050a18] text-gray-300 selection:bg-gold/30 selection:text-white">
+      <nav className="fixed w-full z-50 bg-[#050a18]/80 backdrop-blur-lg border-b border-white/5 h-20 flex items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex justify-between items-center">
+          <button onClick={goHomeAndScrollTop} className="hover:opacity-80 transition-opacity">
+            <Logo />
+          </button>
+
+          <div className="hidden md:flex items-center space-x-8 text-sm font-semibold">
+            <Link to="/#home" className="text-white hover:text-gold transition">Home</Link>
+            <Link to="/#about" className="text-white hover:text-gold transition">About</Link>
+            <Link to="/#ventures" className="text-white hover:text-gold transition">Ventures</Link>
+            <Link to="/#contact" className="bg-gold text-navy px-6 py-2.5 rounded-full font-bold hover:brightness-110 transition">Contact</Link>
+          </div>
+        </div>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/ventures/:slug" element={<ProjectDetailPage />} />
+      </Routes>
+
+      <footer className="py-16 bg-[#050a18] border-t border-white/5 text-center text-gray-500">
+        <button onClick={goHomeAndScrollTop} className="mb-8">
+          <Logo />
+        </button>
+        <p className="text-[10px] uppercase font-black tracking-[0.4em] opacity-40">© {new Date().getFullYear()} Gomatha Realtors. Licensed DTCP & VUDA Layouts.</p>
+      </footer>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
