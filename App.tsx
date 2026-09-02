@@ -357,9 +357,10 @@ const HomePage = () => {
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setContactLoading(true);
-    const formData = new FormData(e.currentTarget);
+      const formData = new FormData(e.currentTarget);
+    const selectedProject = formData.get('project') as string;
     const data = {
-      projectName: "General Website Inquiry",
+      projectName: selectedProject && selectedProject !== "" ? selectedProject : "General Website Inquiry",
       name: formData.get('name'),
       phone: formData.get('phone'),
       message: "Visitor submitted through footer contact form."
@@ -508,7 +509,14 @@ const HomePage = () => {
 
               <form className="space-y-6" onSubmit={handleContactSubmit}>
                  <input name="name" required className="w-full p-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:border-gold" placeholder="Your Name" />
-                 <input name="phone" required className="w-full p-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:border-gold" placeholder="Phone Number" />
+                                  <input name="phone" required className="w-full p-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:border-gold" placeholder="Phone Number" />
+                 <select name="project" required defaultValue="" className="w-full p-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:border-gold appearance-none">
+                    <option value="" disabled className="bg-[#050a18] text-gray-400">Which venture are you interested in?</option>
+                    {VENTURES.map(v => (
+                      <option key={v.id} value={v.name} className="bg-[#050a18] text-white">{v.name}</option>
+                    ))}
+                    <option value="General Inquiry / Not Sure" className="bg-[#050a18] text-white">General Inquiry / Not Sure</option>
+                 </select>
                  <button type="submit" disabled={contactLoading} className="w-full py-6 bg-gold text-navy font-bold uppercase rounded-2xl shadow-xl hover:brightness-110 transition flex items-center justify-center gap-2">
                     {contactLoading ? <Loader2 className="animate-spin" /> : "Send Form"}
                  </button>
