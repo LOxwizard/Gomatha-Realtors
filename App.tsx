@@ -151,13 +151,13 @@ const EnquiryModal = ({ projectName, onClose }: { projectName: string, onClose: 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-      const formData = new FormData(e.currentTarget);
-    const selectedProject = formData.get('project') as string;
+          const formData = new FormData(e.currentTarget);
     const data = {
-      projectName: selectedProject && selectedProject !== "" ? selectedProject : "General Website Inquiry",
+      projectName,
       name: formData.get('name'),
       phone: formData.get('phone'),
-      message: "Visitor submitted through footer contact form."
+      message: formData.get('message')
+    };
     };
 
     try {
