@@ -158,7 +158,7 @@ const EnquiryModal = ({ projectName, onClose }: { projectName: string, onClose: 
       phone: formData.get('phone'),
       message: formData.get('message')
     };
-    };
+  
 
     try {
       await fetch(COMPANY_DETAILS.SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
