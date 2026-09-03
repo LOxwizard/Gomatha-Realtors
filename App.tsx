@@ -357,7 +357,7 @@ const HomePage = () => {
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setContactLoading(true);
-      const formData = new FormData(e.currentTarget);
+         const formData = new FormData(e.currentTarget);
     const selectedProject = formData.get('project') as string;
     const data = {
       projectName: selectedProject && selectedProject !== "" ? selectedProject : "General Website Inquiry",
