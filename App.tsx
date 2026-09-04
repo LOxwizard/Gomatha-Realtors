@@ -105,8 +105,8 @@ const VENTURES: Venture[] = [
     sqyds: "per Sq. Yd",
     status: VentureStatus.RUNNING,
     imageUrl: "/Akshaya-Nidhi/Akshaya-Nidhi.jpg",
-    brochureUrl: "/brochures/Akshaya-Nidhi Brochure.pdf",
-    layoutUrl: "/Akshaya-Nidhi/Akshaya-Nidhi Layout-copy.pdf",
+    brochureUrl: "/brochures/Akshaya-Nidhi_Brochure.pdf",
+    layoutUrl: "/Akshaya-Nidhi/Akshaya-Nidhi_Layout-copy.jpeg",
     gallery: ["/Akshaya-Nidhi/1.jpg", "/Akshaya-Nidhi/2.jpg", "/Akshaya-Nidhi/3.jpg", "/Akshaya-Nidhi/4.jpg"],
     features: ["Black Top Roads", "Drainage System", "Electricity", "Compound Wall", "Plantation"]
   }
